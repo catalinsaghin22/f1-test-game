@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 GRID - Online 2 Player PvP</title>
-    <!-- PeerJS CDN pentru conexiune P2P directă fără server configurat -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <title>F1 GRID ONLINE - Firebase PvP</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -19,13 +17,8 @@
             --p2-bg: #1a2a3d;
         }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-        }
-
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
@@ -34,91 +27,53 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
         }
 
-        /* Lobby & Modal Styling */
+        /* Lobby Overlay */
         #lobby-screen {
-            background-color: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 24px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
-
-        .lobby-title {
-            color: var(--accent-color);
-            font-size: 1.6rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .lobby-box {
-            background: #252525;
-            border: 1px solid #3a3a3a;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .room-code-display {
-            font-size: 2.2rem;
-            font-weight: bold;
-            letter-spacing: 6px;
-            color: #00d2be;
-            margin: 10px 0;
-            font-family: monospace;
-        }
-
-        /* Game Interface */
-        #game-screen {
-            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(18, 18, 18, 0.95);
+            display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            max-width: 460px;
+            justify-content: center;
+            z-index: 1000;
         }
+
+        .lobby-card {
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .lobby-card h2 { margin-top: 0; color: var(--accent-color); }
+        .lobby-card input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; text-align: center; font-size: 1.1rem; box-sizing: border-box;}
+        .lobby-card button { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 1rem; }
+        .lobby-card button:hover { background-color: #ff1801; }
 
         .header-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            max-width: 440px;
+            margin-bottom: 5px;
+        }
+
+        h1 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; text-align: center; flex: 1; }
+
+        .room-info {
+            font-size: 0.8rem;
+            color: #aaa;
             margin-bottom: 10px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
             text-align: center;
-        }
-
-        .controls-top {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-ctrl {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid #444;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .btn-ctrl:hover {
-            border-color: var(--accent-color);
-            background-color: #2a2a2a;
         }
 
         .scoreboard {
@@ -126,53 +81,43 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            max-width: 440px;
             background-color: var(--card-bg);
             border: 1px solid #333;
             border-radius: 8px;
-            padding: 10px 16px;
+            padding: 8px 16px;
             margin-bottom: 8px;
+            box-sizing: border-box;
         }
 
-        .player-badge {
-            font-weight: bold;
-            font-size: 0.95rem;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.3s;
-        }
-
+        .player-badge { font-weight: bold; font-size: 0.95rem; padding: 4px 10px; border-radius: 6px; }
         .player-badge.p1 { color: var(--p1-color); }
         .player-badge.p2 { color: var(--p2-color); }
-
-        .player-badge.active-turn {
-            background-color: #333;
-            box-shadow: 0 0 12px rgba(255,255,255,0.25);
-            border: 1px solid currentColor;
-        }
+        .player-badge.active-turn { background-color: #333; border: 1px solid currentColor; box-shadow: 0 0 8px rgba(255,255,255,0.2); }
 
         /* Timer Bar */
         .timer-container {
             width: 100%;
-            height: 8px;
+            max-width: 440px;
+            height: 6px;
             background-color: #2a2a2a;
-            border-radius: 4px;
+            border-radius: 3px;
+            margin-bottom: 10px;
             overflow: hidden;
-            margin-bottom: 12px;
-            border: 1px solid #333;
         }
-
         .timer-bar {
             height: 100%;
             width: 100%;
-            background-color: var(--accent-color);
-            transition: width 0.1s linear, background-color 0.3s;
+            background-color: #00d2be;
+            transition: width 1s linear, background-color 0.5s;
         }
 
-        /* Board Grid */
+        #instructions { font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; text-align: center; height: 20px;}
+
         .board {
             display: grid;
-            grid-template-columns: 100px 100px 100px 100px;
-            grid-template-rows: 55px 100px 100px 100px;
+            grid-template-columns: 110px 110px 110px 110px;
+            grid-template-rows: 60px 110px 110px 110px;
             gap: 6px;
             background-color: #222;
             padding: 8px;
@@ -184,7 +129,7 @@
         .header-cell {
             background-color: #1a1a1a;
             color: #ff1801;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -195,13 +140,13 @@
             border: 1px solid #333;
         }
 
-        .corner-cell { background-color: transparent; border: none; }
+        .corner-cell { background-color: transparent; }
 
         .cell {
             background-color: var(--cell-bg);
             border: 2px dashed #444;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: bold;
             color: #ccc;
             cursor: pointer;
@@ -209,181 +154,86 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 6px;
+            padding: 8px;
             text-align: center;
             transition: all 0.2s;
         }
 
-        .cell:hover:not(.solved-p1):not(.solved-p2) {
-            border-color: var(--accent-color);
-            background-color: #323232;
-        }
+        .cell:hover { border-color: var(--accent-color); background-color: #323232; }
+        .cell.selected { border: 2px solid var(--accent-color); background-color: #382020; }
+        .cell.solved-p1 { border: 2px solid var(--p1-color); background-color: var(--p1-bg); color: white; border-style: solid; }
+        .cell.solved-p2 { border: 2px solid var(--p2-color); background-color: var(--p2-bg); color: white; border-style: solid; }
 
-        .cell.selected {
-            border: 2px solid var(--accent-color);
-            background-color: #382020;
-        }
-
-        .cell.solved-p1 {
-            border: 2px solid var(--p1-color);
-            background-color: var(--p1-bg);
-            color: white;
-            font-size: 0.85rem;
-            border-style: solid;
-            cursor: default;
-        }
-
-        .cell.solved-p2 {
-            border: 2px solid var(--p2-color);
-            background-color: var(--p2-bg);
-            color: white;
-            font-size: 0.85rem;
-            border-style: solid;
-            cursor: default;
-        }
-
-        /* Inputs & Buttons */
-        .input-container {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background-color: var(--card-bg);
-            color: white;
-            font-size: 1rem;
-            text-transform: capitalize;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        button.action-btn {
-            padding: 12px 20px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        button.action-btn:hover:not(:disabled) {
-            background-color: #ff1801;
-        }
-
-        button.action-btn:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        #message {
-            margin-top: 12px;
-            font-size: 0.95rem;
-            height: 24px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        #status-info {
-            font-size: 0.85rem;
-            color: #888;
-            margin-bottom: 8px;
-        }
+        .input-container { display: flex; gap: 10px; width: 100%; max-width: 360px; }
+        input { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid #444; background-color: var(--card-bg); color: white; font-size: 1rem; }
+        input:focus { outline: none; border-color: var(--accent-color); }
+        button.action-btn { padding: 12px 20px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        button.action-btn:hover { background-color: #ff1801; }
+        #message { margin-top: 10px; font-size: 0.95rem; height: 24px; font-weight: bold; text-align: center; }
     </style>
+
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-    <!-- LOBBY SCREEN -->
+    <!-- LOBBY INITIAL -->
     <div id="lobby-screen">
-        <div class="lobby-title">🏁 F1 GRID ONLINE 🏁</div>
-        <p style="font-size:0.9rem; color:#aaa; margin-bottom:20px;">Joacă PvP online cu un prieten în timp real!</p>
-        
-        <div class="lobby-box">
-            <h3 style="margin-top:0;">Creează Joc (Host)</h3>
-            <button class="action-btn" style="width:100%;" onclick="createRoom()">Creează Cameră Nouă</button>
-            <div id="host-code-area" style="display:none; margin-top:12px;">
-                <span style="font-size:0.85rem; color:#bbb;">Trimite codul prietenului:</span>
-                <div class="room-code-display" id="display-room-code">----</div>
-                <small style="color:#f59e0b;">Așteptare conectare rival...</small>
-            </div>
+        <div class="lobby-card">
+            <h2>F1 GRID ONLINE</h2>
+            <p>Joc PvP în timp real</p>
+            <button onclick="createRoom()">Creează Cameră Nouă</button>
+            <hr style="border-color: #333; margin: 20px 0;">
+            <input type="text" id="room-code-input" placeholder="Introdu Codul (ex: A8B2)" maxlength="6">
+            <button onclick="joinRoom()">Alătură-te în Cameră</button>
+            <p id="lobby-msg" style="color: #e10600; font-size: 0.85rem; margin-top: 10px;"></p>
         </div>
-
-        <div class="lobby-box">
-            <h3 style="margin-top:0;">Intră în Cameră</h3>
-            <div style="display:flex; gap:8px;">
-                <input type="text" id="join-code-input" placeholder="Cod (ex: A1B2)" maxlength="5" style="text-transform:uppercase; text-align:center; font-weight:bold; letter-spacing:2px;">
-                <button class="action-btn" onclick="joinRoom()">Conectează</button>
-            </div>
-        </div>
-        <div id="lobby-error" style="color:var(--accent-color); font-weight:bold; font-size:0.85rem;"></div>
     </div>
 
-    <!-- GAME SCREEN -->
-    <div id="game-screen">
-        <div class="header-container">
-            <h1 id="main-title">F1 GRID ONLINE</h1>
-            <div class="controls-top">
-                <button class="btn-ctrl" onclick="toggleLanguage()">🌐 <span id="lang-label">EN</span></button>
-            </div>
-        </div>
-
-        <div id="status-info">Conectat | Ești: <b id="my-role-text">-</b></div>
-
-        <div class="scoreboard">
-            <div id="p1-badge" class="player-badge p1 active-turn">🔴 P1 (Host): <span id="p1-score">0</span></div>
-            <div id="p2-badge" class="player-badge p2">🔵 P2 (Guest): <span id="p2-score">0</span></div>
-        </div>
-
-        <!-- Timer bar -->
-        <div class="timer-container">
-            <div id="timer-bar" class="timer-bar"></div>
-        </div>
-        
-        <div id="instructions" style="font-weight:bold; margin-bottom:8px; font-size:0.9rem;">Se pregătește jocul...</div>
-
-        <div class="board" id="board"></div>
-
-        <div class="input-container">
-            <input type="text" id="driver-input" placeholder="Așteaptă tura ta..." disabled>
-            <button class="action-btn" id="submit-btn" onclick="checkDriver()" disabled>Trimite</button>
-        </div>
-
-        <div id="message"></div>
+    <div class="header-container">
+        <h1 id="main-title">F1 GRID ONLINE</h1>
     </div>
+    <div class="room-info" id="room-display-info">Neconectat</div>
+
+    <div class="scoreboard">
+        <div id="p1-badge" class="player-badge p1">🔴 P1: <span id="p1-score">0</span></div>
+        <div id="p2-badge" class="player-badge p2">🔵 P2: <span id="p2-score">0</span></div>
+    </div>
+    
+    <div class="timer-container"><div class="timer-bar" id="timer-bar"></div></div>
+    <div id="instructions">Așteptare conectare...</div>
+
+    <div class="board" id="board"></div>
+
+    <div class="input-container">
+        <input type="text" id="driver-input" placeholder="Alege o căsuță..." disabled>
+        <button class="action-btn" id="submit-btn" onclick="checkDriver()" disabled>Trimite</button>
+    </div>
+
+    <div id="message"></div>
 
     <script>
-        // State variables
-        let peer = null;
-        let conn = null;
-        let myRole = null; // 'P1' (Host) or 'P2' (Guest)
-        
+        // CONFIGURARE FIREBASE GRATUITĂ
+        const firebaseConfig = {
+            databaseURL: "https://f1-grid-default-rtdb.europe-west1.firebasedatabase.app/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let driversDB = [];
+        let roomCode = null;
+        let myRole = null; // 'p1' sau 'p2'
         let selectedCell = null;
-        let currentLang = 'ro';
         let rowCriteria = [];
         let colCriteria = [];
-        
-        let currentPlayer = 1; // 1 = P1, 2 = P2
+        let gridState = Array(3).fill(null).map(() => Array(3).fill(0));
         let p1Score = 0;
         let p2Score = 0;
-        let gridState = Array(3).fill(null).map(() => Array(3).fill(0));
+        let currentPlayer = 1;
         let gameOver = false;
-
-        // Timer Variables
-        const TURN_TIME_LIMIT = 30; // Secunde per tură
-        let timerSeconds = TURN_TIME_LIMIT;
         let timerInterval = null;
+        let timeLeft = 30;
 
         const teamPool = ["Ferrari", "McLaren", "Mercedes", "Red Bull", "Williams", "Renault", "Aston Martin"];
         const nationalityPool = ["Spaniol", "Britanic", "German", "Brazilian", "Finlandez", "Francez", "Italian"];
@@ -393,42 +243,10 @@
             { type: "champ", val: false, labelRo: "Fără Titlu", labelEn: "No Title" }
         ];
 
-        const translations = {
-            ro: {
-                title: "F1 GRID PvP ONLINE",
-                turnP1: "Rândul lui P1 (🔴): Alege o celulă!",
-                turnP2: "Rândul lui P2 (🔵): Alege o celulă!",
-                yourTurn: "⚡ ESTE TURA TA! Alege o căsuță și trimite pilotul!",
-                opponentTurn: "⏳ Rândul adversarului... Așteaptă mutarea.",
-                placeholder: "Scrie numele pilotului...",
-                submitBtn: "Trimite",
-                notFound: "❌ Pilot negăsit! Tura trecută la adversar.",
-                correct: "Corect!",
-                wrongMatch: "nu se potrivește! Tura trecută.",
-                p1Win: "🏆 JUCĂTORUL 1 (🔴) A CÂȘTIGAT!",
-                p2Win: "🏆 JUCĂTORUL 2 (🔵) A CÂȘTIGAT!",
-                draw: "🤝 EGALITATE!",
-                timeOut: "⏰ Timpul a expirat! Tura trece la celălalt jucător."
-            },
-            en: {
-                title: "F1 GRID PvP ONLINE",
-                turnP1: "P1's Turn (🔴): Select a cell!",
-                turnP2: "P2's Turn (🔵): Select a cell!",
-                yourTurn: "⚡ IT'S YOUR TURN! Pick a cell & enter driver!",
-                opponentTurn: "⏳ Opponent's turn... Waiting for move.",
-                placeholder: "Type driver name...",
-                submitBtn: "Submit",
-                notFound: "❌ Driver not found! Turn passed.",
-                correct: "Correct!",
-                wrongMatch: "does not match! Turn passed.",
-                p1Win: "🏆 PLAYER 1 (🔴) WINS!",
-                p2Win: "🏆 PLAYER 2 (🔵) WINS!",
-                draw: "🤝 DRAW!",
-                timeOut: "⏰ Time expired! Turn passed to opponent."
-            }
-        };
+        fetch('drivers.json')
+            .then(res => res.json())
+            .then(data => { driversDB = data; });
 
-        // Network Setup (PeerJS)
         function generateRoomCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
@@ -436,213 +254,9 @@
             return code;
         }
 
-        function createRoom() {
-            const roomCode = generateRoomCode();
-            myRole = 'P1';
-            
-            document.getElementById('display-room-code').textContent = roomCode;
-            document.getElementById('host-code-area').style.display = 'block';
-
-            peer = new Peer('f1grid-' + roomCode);
-
-            peer.on('open', (id) => {
-                console.log('Room created with Peer ID:', id);
-            });
-
-            peer.on('connection', (c) => {
-                conn = c;
-                setupConnectionListeners();
-                startOnlineGame();
-            });
-
-            peer.on('error', (err) => {
-                document.getElementById('lobby-error').textContent = "Eroare la crearea camerei. Încearcă din nou.";
-            });
-        }
-
-        function joinRoom() {
-            const inputCode = document.getElementById('join-code-input').value.trim().toUpperCase();
-            if(!inputCode || inputCode.length < 4) {
-                document.getElementById('lobby-error').textContent = "Introdu un cod de 4 caractere!";
-                return;
-            }
-
-            myRole = 'P2';
-            peer = new Peer();
-
-            peer.on('open', () => {
-                conn = peer.connect('f1grid-' + inputCode);
-                setupConnectionListeners();
-            });
-
-            peer.on('error', (err) => {
-                document.getElementById('lobby-error').textContent = "Nu s-a putut găsi camera! Verifică codul.";
-            });
-        }
-
-        function setupConnectionListeners() {
-            conn.on('open', () => {
-                console.log('Connected to peer!');
-                if (myRole === 'P1') {
-                    // Host generates grid and sends state to Guest
-                    generateNewGridLogic();
-                    sendGameState();
-                    startOnlineGame();
-                }
-            });
-
-            conn.on('data', (data) => {
-                handleIncomingNetworkData(data);
-            });
-
-            conn.on('close', () => {
-                alert("Adversarul s-a deconectat!");
-                location.reload();
-            });
-        }
-
-        function sendGameState() {
-            if (conn && conn.open) {
-                conn.send({
-                    type: 'SYNC_GAME',
-                    rowCriteria,
-                    colCriteria,
-                    gridState,
-                    currentPlayer,
-                    p1Score,
-                    p2Score,
-                    gameOver
-                });
-            }
-        }
-
-        function handleIncomingNetworkData(data) {
-            if (data.type === 'SYNC_GAME') {
-                rowCriteria = data.rowCriteria;
-                colCriteria = data.colCriteria;
-                gridState = data.gridState;
-                currentPlayer = data.currentPlayer;
-                p1Score = data.p1Score;
-                p2Score = data.p2Score;
-                gameOver = data.gameOver;
-
-                document.getElementById('p1-score').textContent = p1Score;
-                document.getElementById('p2-score').textContent = p2Score;
-
-                renderBoardUI();
-                updateTurnUI();
-                resetTimer();
-            } else if (data.type === 'MESSAGE') {
-                const messageEl = document.getElementById('message');
-                messageEl.style.color = data.color;
-                messageEl.textContent = data.text;
-            }
-        }
-
-        function startOnlineGame() {
-            document.getElementById('lobby-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'flex';
-            document.getElementById('my-role-text').textContent = myRole === 'P1' ? '🔴 Jucător 1 (Host)' : '🔵 Jucător 2 (Guest)';
-
-            updateTurnUI();
-            renderBoardUI();
-            resetTimer();
-        }
-
-        /* TIMER LOGIC */
-        function resetTimer() {
-            clearInterval(timerInterval);
-            if (gameOver) return;
-
-            timerSeconds = TURN_TIME_LIMIT;
-            updateTimerBar();
-
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerBar();
-
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeOut();
-                }
-            }, 1000);
-        }
-
-        function updateTimerBar() {
-            const bar = document.getElementById('timer-bar');
-            const percentage = (timerSeconds / TURN_TIME_LIMIT) * 100;
-            bar.style.width = percentage + '%';
-
-            if (percentage <= 25) {
-                bar.style.backgroundColor = '#e10600';
-            } else if (percentage <= 50) {
-                bar.style.backgroundColor = '#f59e0b';
-            } else {
-                bar.style.backgroundColor = '#00d2be';
-            }
-        }
-
-        function handleTimeOut() {
-            if (isMyTurn()) {
-                const messageEl = document.getElementById('message');
-                const t = translations[currentLang];
-                messageEl.style.color = "#e10600";
-                messageEl.textContent = t.timeOut;
-
-                if (conn && conn.open) {
-                    conn.send({ type: 'MESSAGE', text: t.timeOut, color: '#e10600' });
-                }
-
-                switchTurnLogic();
-            }
-        }
-
-        function isMyTurn() {
-            return (currentPlayer === 1 && myRole === 'P1') || (currentPlayer === 2 && myRole === 'P2');
-        }
-
-        function updateTurnUI() {
-            const p1B = document.getElementById('p1-badge');
-            const p2B = document.getElementById('p2-badge');
-            const t = translations[currentLang];
-            const instructions = document.getElementById('instructions');
-
-            if (currentPlayer === 1) {
-                p1B.classList.add('active-turn');
-                p2B.classList.remove('active-turn');
-            } else {
-                p2B.classList.add('active-turn');
-                p1B.classList.remove('active-turn');
-            }
-
-            if (!gameOver) {
-                if (isMyTurn()) {
-                    instructions.textContent = t.yourTurn;
-                    instructions.style.color = '#00d2be';
-                } else {
-                    instructions.textContent = t.opponentTurn;
-                    instructions.style.color = '#aaa';
-                }
-            }
-
-            const input = document.getElementById('driver-input');
-            const btn = document.getElementById('submit-btn');
-
-            if (!isMyTurn() || gameOver || !selectedCell) {
-                input.disabled = true;
-                btn.disabled = true;
-            } else if (selectedCell && isMyTurn()) {
-                input.disabled = false;
-                btn.disabled = false;
-            }
-        }
-
-        /* GRID GENERATION & VALIDATION */
         function createCriterion(category, value) {
-            let labelRo = "", labelEn = "";
-            if (category === 'team') { labelRo = value; labelEn = value; }
-            else if (category === 'nationality') { labelRo = value; labelEn = value; }
-            else if (category === 'era') { labelRo = `Era ${value}`; labelEn = `${value} Era`; }
+            let labelRo = value, labelEn = value;
+            if (category === 'era') { labelRo = `Era ${value}`; labelEn = `${value} Era`; }
             else if (category === 'champ') {
                 labelRo = value ? "Campion Mondial" : "Fără Titlu";
                 labelEn = value ? "World Champion" : "No Title";
@@ -650,76 +264,110 @@
             return { category, value, labelRo, labelEn };
         }
 
-        function driverMatchesCriterion(driver, crit) {
+        function generateUniqueCriteria(count) {
+            const list = [];
+            const used = new Set();
+            const types = ['team', 'nationality', 'era', 'champ'];
+            while (list.length < count) {
+                const t = types[Math.floor(Math.random()*types.length)];
+                let crit;
+                if (t==='team') crit = createCriterion('team', teamPool[Math.floor(Math.random()*teamPool.length)]);
+                else if (t==='nationality') crit = createCriterion('nationality', nationalityPool[Math.floor(Math.random()*nationalityPool.length)]);
+                else if (t==='era') crit = createCriterion('era', eraPool[Math.floor(Math.random()*eraPool.length)]);
+                else crit = createCriterion('champ', champPool[Math.floor(Math.random()*champPool.length)].val);
+
+                const key = `${crit.category}-${crit.value}`;
+                if(!used.has(key)) { used.add(key); list.push(crit); }
+            }
+            return list;
+        }
+
+        function driverMatches(driver, crit) {
             if (crit.category === 'team') return driver.teams.includes(crit.value);
             if (crit.category === 'nationality') return driver.nationality === crit.value;
             if (crit.category === 'era') return driver.eras.includes(crit.value);
-            if (crit.category === 'champ') {
-                return (driver.championships > 0) === crit.value;
-            }
+            if (crit.category === 'champ') return (driver.championships > 0) === crit.value;
             return false;
         }
 
-        function getIntersectionCount(rowCrit, colCrit) {
-            return driversDB.filter(d => driverMatchesCriterion(d, rowCrit) && driverMatchesCriterion(d, colCrit)).length;
-        }
-
-        function generateUniqueCriteria(count) {
-            const criteriaList = [];
-            const usedKeys = new Set();
-            const allTypes = ['team', 'nationality', 'era', 'champ'];
-
-            let safety = 0;
-            while (criteriaList.length < count && safety < 500) {
-                safety++;
-                const type = allTypes[Math.floor(Math.random() * allTypes.length)];
-                let crit;
-
-                if (type === 'team') crit = createCriterion('team', teamPool[Math.floor(Math.random() * teamPool.length)]);
-                else if (type === 'nationality') crit = createCriterion('nationality', nationalityPool[Math.floor(Math.random() * nationalityPool.length)]);
-                else if (type === 'era') crit = createCriterion('era', eraPool[Math.floor(Math.random() * eraPool.length)]);
-                else if (type === 'champ') crit = createCriterion('champ', champPool[Math.floor(Math.random() * champPool.length)].val);
-
-                const uniqueKey = `${crit.category}-${crit.value}`;
-                if (!usedKeys.has(uniqueKey)) {
-                    usedKeys.add(uniqueKey);
-                    criteriaList.push(crit);
-                }
-            }
-            return criteriaList;
-        }
-
-        function generateNewGridLogic() {
-            let validGrid = false;
-            let attempts = 0;
-
-            while (!validGrid && attempts < 400) {
-                attempts++;
-                let allCriteria = generateUniqueCriteria(6);
-                if (allCriteria.length < 6) continue;
-
-                let rItems = allCriteria.slice(0, 3);
-                let cItems = allCriteria.slice(3, 6);
-
-                let matrixValid = true;
-                for (let r = 0; r < 3; r++) {
-                    for (let c = 0; c < 3; c++) {
-                        if (getIntersectionCount(rItems[r], cItems[c]) === 0) {
-                            matrixValid = false; break;
-                        }
+        function createNewGameData() {
+            let valid = false;
+            let rItems, cItems;
+            while(!valid) {
+                let all = generateUniqueCriteria(6);
+                rItems = all.slice(0,3);
+                cItems = all.slice(3,6);
+                valid = true;
+                for(let r=0; r<3; r++) {
+                    for(let c=0; c<3; c++) {
+                        if(driversDB.filter(d => driverMatches(d, rItems[r]) && driverMatches(d, cItems[c])).length === 0) valid = false;
                     }
-                    if (!matrixValid) break;
-                }
-
-                if (matrixValid) {
-                    rowCriteria = rItems;
-                    colCriteria = cItems;
-                    validGrid = true;
                 }
             }
+            return {
+                rowCriteria: rItems,
+                colCriteria: cItems,
+                gridState: Array(3).fill(null).map(() => Array(3).fill(0)),
+                p1Score: 0,
+                p2Score: 0,
+                currentPlayer: 1,
+                gameOver: false,
+                lastMove: null
+            };
         }
 
-        function renderBoardUI() {
+        function createRoom() {
+            if(driversDB.length === 0) { alert("Se încarcă baza de date, încearcă în 2 secunde."); return; }
+            roomCode = generateRoomCode();
+            myRole = 'p1';
+            
+            const gameData = createNewGameData();
+            db.ref('rooms/' + roomCode).set(gameData).then(() => {
+                document.getElementById('lobby-screen').style.display = 'none';
+                document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P1 (Host)`;
+                initGameListener();
+            });
+        }
+
+        function joinRoom() {
+            const code = document.getElementById('room-code-input').value.trim().toUpperCase();
+            if(!code) { document.getElementById('lobby-msg').textContent = "Introdu un cod valid!"; return; }
+            
+            db.ref('rooms/' + code).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    roomCode = code;
+                    myRole = 'p2';
+                    document.getElementById('lobby-screen').style.display = 'none';
+                    document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P2 (Guest)`;
+                    initGameListener();
+                } else {
+                    document.getElementById('lobby-msg').textContent = "Camera nu există!";
+                }
+            });
+        }
+
+        function initGameListener() {
+            db.ref('rooms/' + roomCode).on('value', snapshot => {
+                const state = snapshot.val();
+                if(!state) return;
+
+                rowCriteria = state.rowCriteria;
+                colCriteria = state.colCriteria;
+                gridState = state.gridState;
+                p1Score = state.p1Score;
+                p2Score = state.p2Score;
+                currentPlayer = state.currentPlayer;
+                gameOver = state.gameOver;
+
+                document.getElementById('p1-score').textContent = p1Score;
+                document.getElementById('p2-score').textContent = p2Score;
+
+                renderBoard();
+                updateTurnState();
+            });
+        }
+
+        function renderBoard() {
             const boardEl = document.getElementById('board');
             boardEl.innerHTML = "";
 
@@ -730,181 +378,166 @@
             colCriteria.forEach(col => {
                 const th = document.createElement('div');
                 th.className = 'header-cell';
-                th.textContent = currentLang === 'ro' ? col.labelRo : col.labelEn;
+                th.textContent = col.labelRo;
                 boardEl.appendChild(th);
             });
 
-            rowCriteria.forEach((row, rIndex) => {
+            rowCriteria.forEach((row, rIdx) => {
                 const rh = document.createElement('div');
                 rh.className = 'header-cell';
-                rh.textContent = currentLang === 'ro' ? row.labelRo : row.labelEn;
+                rh.textContent = row.labelRo;
                 boardEl.appendChild(rh);
 
-                colCriteria.forEach((col, cIndex) => {
+                colCriteria.forEach((col, cIdx) => {
                     const cell = document.createElement('div');
                     cell.className = 'cell';
-                    cell.dataset.row = rIndex;
-                    cell.dataset.col = cIndex;
+                    cell.dataset.row = rIdx;
+                    cell.dataset.col = cIdx;
 
-                    const pOwner = gridState[rIndex][cIndex];
-                    if (pOwner === 1) cell.classList.add('solved-p1');
-                    else if (pOwner === 2) cell.classList.add('solved-p2');
+                    const owner = gridState[rIdx][cIdx];
+                    if(owner === 1) cell.classList.add('solved-p1');
+                    if(owner === 2) cell.classList.add('solved-p2');
 
-                    cell.onclick = () => selectCell(cell);
-                    cell.innerHTML = `${currentLang === 'ro' ? row.labelRo : row.labelEn}<br>+<br>${currentLang === 'ro' ? col.labelRo : col.labelEn}`;
+                    if(owner !== 0) {
+                        cell.textContent = owner === 1 ? "P1" : "P2"; // se poate afișa și numele dacă se salvează
+                    } else {
+                        cell.innerHTML = `${row.labelRo}<br>+<br>${col.labelRo}`;
+                    }
+
+                    cell.onclick = () => selectCell(cell, rIdx, cIdx);
                     boardEl.appendChild(cell);
                 });
             });
         }
 
-        function selectCell(cell) {
-            if (!isMyTurn() || gameOver || cell.classList.contains('solved-p1') || cell.classList.contains('solved-p2')) return;
+        function selectCell(cell, r, c) {
+            if(gameOver) return;
+            if(currentPlayer !== (myRole === 'p1' ? 1 : 2)) {
+                document.getElementById('message').textContent = "Nu este rândul tău!";
+                return;
+            }
+            if(gridState[r][c] !== 0) return;
 
             document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
-            selectedCell = cell;
+            selectedCell = { cell, r, c };
             cell.classList.add('selected');
 
             const input = document.getElementById('driver-input');
-            const btn = document.getElementById('submit-btn');
             input.disabled = false;
-            btn.disabled = false;
-            input.placeholder = translations[currentLang].placeholder;
+            document.getElementById('submit-btn').disabled = false;
+            input.placeholder = "Scrie pilotul...";
             input.focus();
         }
 
-        function checkWinCondition() {
-            const lines = [
-                [[0,0], [0,1], [0,2]], [[1,0], [1,1], [1,2]], [[2,0], [2,1], [2,2]],
-                [[0,0], [1,0], [2,0]], [[0,1], [1,1], [2,1]], [[0,2], [1,2], [2,2]],
-                [[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]
-            ];
+        function updateTurnState() {
+            const p1B = document.getElementById('p1-badge');
+            const p2B = document.getElementById('p2-badge');
+            const inst = document.getElementById('instructions');
+            const input = document.getElementById('driver-input');
+            const btn = document.getElementById('submit-btn');
 
-            for (let line of lines) {
-                const [a, b, c] = line;
-                const p = gridState[a[0]][a[1]];
-                if (p !== 0 && p === gridState[b[0]][b[1]] && p === gridState[c[0]][c[1]]) {
-                    return p;
-                }
+            const isMyTurn = currentPlayer === (myRole === 'p1' ? 1 : 2);
+
+            if(currentPlayer === 1) {
+                p1B.classList.add('active-turn'); p2B.classList.remove('active-turn');
+            } else {
+                p2B.classList.add('active-turn'); p1B.classList.remove('active-turn');
             }
 
-            let isFull = true;
-            for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                    if (gridState[r][c] === 0) isFull = false;
-                }
-            }
-
-            if (isFull) {
-                if (p1Score > p2Score) return 1;
-                if (p2Score > p1Score) return 2;
-                return 3;
-            }
-            return 0;
-        }
-
-        function checkDriver() {
-            if (!selectedCell || !isMyTurn() || gameOver) return;
-
-            const inputVal = document.getElementById('driver-input').value.trim().toLowerCase();
-            const messageEl = document.getElementById('message');
-            const t = translations[currentLang];
-
-            const matchedDriver = driversDB.find(d => d.name.toLowerCase().includes(inputVal));
-
-            if (!matchedDriver) {
-                const txt = t.notFound;
-                messageEl.style.color = "#e10600";
-                messageEl.textContent = txt;
-                if(conn) conn.send({ type: 'MESSAGE', text: `Adversarul a greșit numele!`, color: '#e10600' });
-                switchTurnLogic();
+            if(gameOver) {
+                inst.textContent = "Jocul s-a încheiat!";
+                input.disabled = true; btn.disabled = true;
                 return;
             }
 
-            const rIdx = parseInt(selectedCell.dataset.row);
-            const cIdx = parseInt(selectedCell.dataset.col);
-
-            const rowCrit = rowCriteria[rIdx];
-            const colCrit = colCriteria[cIdx];
-
-            const matchesRow = driverMatchesCriterion(matchedDriver, rowCrit);
-            const matchesCol = driverMatchesCriterion(matchedDriver, colCrit);
-
-            if (matchesRow && matchesCol) {
-                gridState[rIdx][cIdx] = currentPlayer;
-                if (currentPlayer === 1) p1Score++;
-                else p2Score++;
-
-                const txt = `${t.correct} P${currentPlayer} (${matchedDriver.name}) 🏆`;
-                messageEl.style.color = "#00d2be";
-                messageEl.textContent = txt;
-
-                if (conn) conn.send({ type: 'MESSAGE', text: txt, color: '#00d2be' });
-
-                const winResult = checkWinCondition();
-                if (winResult !== 0) {
-                    gameOver = true;
-                    if (winResult === 1) messageEl.textContent = t.p1Win;
-                    else if (winResult === 2) messageEl.textContent = t.p2Win;
-                    else messageEl.textContent = t.draw;
-                }
-
-                switchTurnLogic();
+            if(isMyTurn) {
+                inst.textContent = "Este rândul tău! Alege o căsuță.";
+                if(!selectedCell) { input.disabled = true; btn.disabled = true; }
             } else {
-                const txt = `❌ ${matchedDriver.name} ${t.wrongMatch}`;
-                messageEl.style.color = "#e10600";
-                messageEl.textContent = txt;
-
-                if (conn) conn.send({ type: 'MESSAGE', text: txt, color: '#e10600' });
-                switchTurnLogic();
+                inst.textContent = "Rândul adversarului... Așteaptă mutarea.";
+                input.disabled = true; btn.disabled = true;
+                selectedCell = null;
             }
-        }
 
-        function switchTurnLogic() {
-            selectedCell = null;
-            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
-            document.getElementById('driver-input').value = "";
-
-            currentPlayer = currentPlayer === 1 ? 2 : 1;
-            sendGameState();
-            updateTurnUI();
             resetTimer();
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'ro' ? 'en' : 'ro';
-            document.getElementById('lang-label').textContent = currentLang === 'ro' ? 'EN' : 'RO';
-            document.getElementById('main-title').textContent = translations[currentLang].title;
-            document.getElementById('submit-btn').textContent = translations[currentLang].submitBtn;
-            updateTurnUI();
-            renderBoardUI();
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            const bar = document.getElementById('timer-bar');
+            bar.style.width = '100%';
+            bar.style.backgroundColor = '#00d2be';
+
+            if(gameOver) return;
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                bar.style.width = (timeLeft / 30 * 100) + '%';
+                if(timeLeft <= 10) bar.style.backgroundColor = '#e10600';
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if(currentPlayer === (myRole === 'p1' ? 1 : 2)) {
+                        // T impul a expirat pentru tine -> mută tura la celălalt
+                        switchTurnAuto();
+                    }
+                }
+            }, 1000);
         }
 
-        // Fetch fallback database if drivers.json fails
-        const fallbackDrivers = [
-            { "id": "hamilton", "name": "Lewis Hamilton", "nationality": "Britanic", "teams": ["McLaren", "Mercedes"], "championships": 7, "eras": ["2000s", "2010s", "2020s"] },
-            { "id": "alonso", "name": "Fernando Alonso", "nationality": "Spaniol", "teams": ["Renault", "McLaren", "Ferrari", "Aston Martin"], "championships": 2, "eras": ["2000s", "2010s", "2020s"] },
-            { "id": "vettel", "name": "Sebastian Vettel", "nationality": "German", "teams": ["BMW Sauber", "Toro Rosso", "Red Bull", "Ferrari", "Aston Martin"], "championships": 4, "eras": ["2000s", "2010s", "2020s"] },
-            { "id": "verstappen", "name": "Max Verstappen", "nationality": "Olandez", "teams": ["Toro Rosso", "Red Bull"], "championships": 3, "eras": ["2010s", "2020s"] },
-            { "id": "leclerc", "name": "Charles Leclerc", "nationality": "Monegasg", "teams": ["Sauber", "Ferrari"], "championships": 0, "eras": ["2010s", "2020s"] },
-            { "id": "sainz", "name": "Carlos Sainz", "nationality": "Spaniol", "teams": ["Toro Rosso", "Renault", "McLaren", "Ferrari"], "championships": 0, "eras": ["2010s", "2020s"] },
-            { "id": "bearman", "name": "Oliver Bearman", "nationality": "Britanic", "teams": ["Ferrari", "Haas"], "championships": 0, "eras": ["2020s"] },
-            { "id": "raikkonen", "name": "Kimi Raikkonen", "nationality": "Finlandez", "teams": ["Sauber", "McLaren", "Ferrari", "Lotus", "Alfa Romeo"], "championships": 1, "eras": ["2000s", "2010s", "2020s"] },
-            { "id": "massa", "name": "Felipe Massa", "nationality": "Brazilian", "teams": ["Sauber", "Ferrari", "Williams"], "championships": 0, "eras": ["2000s", "2010s"] },
-            { "id": "rosberg", "name": "Nico Rosberg", "nationality": "German", "teams": ["Williams", "Mercedes"], "championships": 1, "eras": ["2000s", "2010s"] },
-            { "id": "bottas", "name": "Valtteri Bottas", "nationality": "Finlandez", "teams": ["Williams", "Mercedes", "Alfa Romeo", "Sauber"], "championships": 0, "eras": ["2010s", "2020s"] },
-            { "id": "button", "name": "Jenson Button", "nationality": "Britanic", "teams": ["Williams", "Benetton", "BAR", "Honda", "Brawn", "McLaren"], "championships": 1, "eras": ["2000s", "2010s"] }
-        ];
+        function switchTurnAuto() {
+            const nextP = currentPlayer === 1 ? 2 : 1;
+            db.ref('rooms/' + roomCode).update({ currentPlayer: nextP });
+        }
 
-        fetch('drivers.json')
-            .then(res => res.json())
-            .then(data => { driversDB = data; })
-            .catch(() => {
-                console.log("drivers.json nu a fost găsit. Se încarcă fallback DB.");
-                driversDB = fallbackDrivers;
+        function checkDriver() {
+            if(!selectedCell || gameOver) return;
+            const val = document.getElementById('driver-input').value.trim().toLowerCase();
+            const driver = driversDB.find(d => d.name.toLowerCase().includes(val));
+
+            const r = selectedCell.r;
+            const c = selectedCell.c;
+
+            if(!driver || !driverMatches(driver, rowCriteria[r]) || !driverMatches(driver, colCriteria[c])) {
+                document.getElementById('message').style.color = "#e10600";
+                document.getElementById('message').textContent = "❌ Greșit sau negăsit! Tura se schimbă.";
+                switchTurnAuto();
+                resetInputState();
+                return;
+            }
+
+            // Corect
+            gridState[r][c] = currentPlayer;
+            if(currentPlayer === 1) p1Score++; else p2Score++;
+
+            // Verificare câştig / egalitate
+            let nextP = currentPlayer === 1 ? 2 : 1;
+            let isFull = gridState.every(row => row.every(cell => cell !== 0));
+
+            db.ref('rooms/' + roomCode).update({
+                gridState: gridState,
+                p1Score: p1Score,
+                p2Score: p2Score,
+                currentPlayer: nextP,
+                gameOver: isFull
             });
 
-        document.getElementById('driver-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkDriver();
+            document.getElementById('message').style.color = "#00d2be";
+            document.getElementById('message').textContent = `Corect! (${driver.name}) 🏆`;
+            resetInputState();
+        }
+
+        function resetInputState() {
+            selectedCell = null;
+            document.getElementById('driver-input').value = "";
+            document.getElementById('driver-input').disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
+        }
+
+        document.getElementById('driver-input').addEventListener('keypress', e => {
+            if(e.key === 'Enter') checkDriver();
         });
     </script>
 </body>
