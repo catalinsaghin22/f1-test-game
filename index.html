@@ -70,10 +70,11 @@
         h1 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; text-align: center; flex: 1; }
 
         .room-info {
-            font-size: 0.8rem;
-            color: #aaa;
+            font-size: 0.85rem;
+            color: #00d2be;
             margin-bottom: 10px;
             text-align: center;
+            font-weight: bold;
         }
 
         .scoreboard {
@@ -185,7 +186,7 @@
             <p>Joc PvP în timp real</p>
             <button onclick="createRoom()">Creează Cameră Nouă</button>
             <hr style="border-color: #333; margin: 20px 0;">
-            <input type="text" id="room-code-input" placeholder="Introdu Codul (ex: A8B2)" maxlength="6">
+            <input type="text" id="room-code-input" placeholder="Introdu Codul (ex: URR2)" maxlength="6">
             <button onclick="joinRoom()">Alătură-te în Cameră</button>
             <p id="lobby-msg" style="color: #e10600; font-size: 0.85rem; margin-top: 10px;"></p>
         </div>
@@ -214,7 +215,6 @@
     <div id="message"></div>
 
     <script>
-        // CONFIGURARE FIREBASE GRATUITĂ
         const firebaseConfig = {
             databaseURL: "https://f1-grid-default-rtdb.europe-west1.firebasedatabase.app/"
         };
@@ -223,7 +223,7 @@
 
         let driversDB = [];
         let roomCode = null;
-        let myRole = null; // 'p1' sau 'p2'
+        let myRole = null; 
         let selectedCell = null;
         let rowCriteria = [];
         let colCriteria = [];
@@ -311,8 +311,7 @@
                 p1Score: 0,
                 p2Score: 0,
                 currentPlayer: 1,
-                gameOver: false,
-                lastMove: null
+                gameOver: false
             };
         }
 
@@ -399,7 +398,7 @@
                     if(owner === 2) cell.classList.add('solved-p2');
 
                     if(owner !== 0) {
-                        cell.textContent = owner === 1 ? "P1" : "P2"; // se poate afișa și numele dacă se salvează
+                        cell.textContent = owner === 1 ? "P1 🔴" : "P2 🔵";
                     } else {
                         cell.innerHTML = `${row.labelRo}<br>+<br>${col.labelRo}`;
                     }
@@ -479,7 +478,6 @@
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
                     if(currentPlayer === (myRole === 'p1' ? 1 : 2)) {
-                        // T impul a expirat pentru tine -> mută tura la celălalt
                         switchTurnAuto();
                     }
                 }
@@ -507,11 +505,9 @@
                 return;
             }
 
-            // Corect
             gridState[r][c] = currentPlayer;
             if(currentPlayer === 1) p1Score++; else p2Score++;
 
-            // Verificare câştig / egalitate
             let nextP = currentPlayer === 1 ? 2 : 1;
             let isFull = gridState.every(row => row.every(cell => cell !== 0));
 
