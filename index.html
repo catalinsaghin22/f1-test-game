@@ -34,7 +34,7 @@
         #lobby-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(18, 18, 18, 0.95);
+            background-color: rgba(18, 18, 18, 0.96);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -48,15 +48,17 @@
             padding: 30px;
             border-radius: 12px;
             text-align: center;
-            max-width: 360px;
+            max-width: 380px;
             width: 90%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
         }
 
-        .lobby-card h2 { margin-top: 0; color: var(--accent-color); }
-        .lobby-card input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; text-align: center; font-size: 1.1rem; box-sizing: border-box;}
-        .lobby-card button { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 1rem; }
+        .lobby-card h2 { margin-top: 0; color: var(--accent-color); font-size: 1.5rem; }
+        .lobby-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; text-align: center; font-size: 1.1rem; box-sizing: border-box; text-transform: uppercase;}
+        .lobby-card input:focus { outline: none; border-color: var(--accent-color); }
+        .lobby-card button { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 1rem; transition: background 0.2s;}
         .lobby-card button:hover { background-color: #ff1801; }
+        .lobby-card button:disabled { background-color: #555; cursor: not-allowed; }
 
         .header-container {
             display: flex;
@@ -166,8 +168,8 @@
         .cell.solved-p2 { border: 2px solid var(--p2-color); background-color: var(--p2-bg); color: white; border-style: solid; }
 
         .input-container { display: flex; gap: 10px; width: 100%; max-width: 360px; }
-        input { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid #444; background-color: var(--card-bg); color: white; font-size: 1rem; }
-        input:focus { outline: none; border-color: var(--accent-color); }
+        input[type="text"] { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid #444; background-color: var(--card-bg); color: white; font-size: 1rem; }
+        input[type="text"]:focus { outline: none; border-color: var(--accent-color); }
         button.action-btn { padding: 12px 20px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
         button.action-btn:hover { background-color: #ff1801; }
         #message { margin-top: 10px; font-size: 0.95rem; height: 24px; font-weight: bold; text-align: center; }
@@ -183,11 +185,19 @@
     <div id="lobby-screen">
         <div class="lobby-card">
             <h2>F1 GRID ONLINE</h2>
-            <p>Joc PvP în timp real</p>
-            <button onclick="createRoom()">Creează Cameră Nouă</button>
+            <p id="db-status-text" style="color: #00d2be; font-size: 0.85rem; margin-bottom: 15px;">Se încarcă baza de date...</p>
+            
+            <button id="create-btn" onclick="createRoom()" disabled>Creează Cameră Nouă</button>
+            <div id="room-code-display" style="display:none; margin: 15px 0; background: #252525; padding: 10px; border-radius: 6px;">
+                <p style="margin:0; font-size:0.8rem; color:#aaa;">Codul camerei tale:</p>
+                <span id="display-code-text" style="font-size: 1.6rem; font-weight: bold; color: #00d2be; letter-spacing: 2px;"></span>
+                <p style="margin:5px 0 0 0; font-size:0.75rem; color:#e10600;">Așteptare conectare rival...</p>
+            </div>
+
             <hr style="border-color: #333; margin: 20px 0;">
-            <input type="text" id="room-code-input" placeholder="Introdu Codul (ex: URR2)" maxlength="6">
-            <button onclick="joinRoom()">Alătură-te în Cameră</button>
+            
+            <input type="text" id="room-code-input" placeholder="Cod (ex: A8B2)" maxlength="6">
+            <button id="join-btn" onclick="joinRoom()" disabled>Alătură-te în Cameră</button>
             <p id="lobby-msg" style="color: #e10600; font-size: 0.85rem; margin-top: 10px;"></p>
         </div>
     </div>
@@ -243,9 +253,19 @@
             { type: "champ", val: false, labelRo: "Fără Titlu", labelEn: "No Title" }
         ];
 
+        // Încărcare sigură a bazei de date
         fetch('drivers.json')
             .then(res => res.json())
-            .then(data => { driversDB = data; });
+            .then(data => {
+                driversDB = data;
+                document.getElementById('db-status-text').textContent = "Baza de date pregătită!";
+                document.getElementById('create-btn').disabled = false;
+                document.getElementById('join-btn').disabled = false;
+            })
+            .catch(err => {
+                console.error("Eroare JSON:", err);
+                document.getElementById('db-status-text').textContent = "Eroare la încărcarea bazei de date!";
+            });
 
         function generateRoomCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -293,7 +313,9 @@
         function createNewGameData() {
             let valid = false;
             let rItems, cItems;
-            while(!valid) {
+            let attempts = 0;
+            while(!valid && attempts < 200) {
+                attempts++;
                 let all = generateUniqueCriteria(6);
                 rItems = all.slice(0,3);
                 cItems = all.slice(3,6);
@@ -316,19 +338,28 @@
         }
 
         function createRoom() {
-            if(driversDB.length === 0) { alert("Se încarcă baza de date, încearcă în 2 secunde."); return; }
+            if(driversDB.length === 0) { alert("Așteaptă încărcarea bazei de date!"); return; }
             roomCode = generateRoomCode();
             myRole = 'p1';
             
             const gameData = createNewGameData();
             db.ref('rooms/' + roomCode).set(gameData).then(() => {
-                document.getElementById('lobby-screen').style.display = 'none';
-                document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P1 (Host)`;
+                // Ascundem butonul de creare și afișăm codul generat
+                document.getElementById('create-btn').style.display = 'none';
+                document.getElementById('room-code-input').style.display = 'none';
+                document.getElementById('join-btn').style.display = 'none';
+                document.getElementById('room-code-display').style.display = 'block';
+                document.getElementById('display-code-text').textContent = roomCode;
+                
                 initGameListener();
+            }).catch(err => {
+                console.error("Eroare Firebase set:", err);
+                alert("Eroare la crearea camerei în rețea.");
             });
         }
 
         function joinRoom() {
+            if(driversDB.length === 0) { alert("Așteaptă încărcarea bazei de date!"); return; }
             const code = document.getElementById('room-code-input').value.trim().toUpperCase();
             if(!code) { document.getElementById('lobby-msg').textContent = "Introdu un cod valid!"; return; }
             
@@ -340,7 +371,7 @@
                     document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P2 (Guest)`;
                     initGameListener();
                 } else {
-                    document.getElementById('lobby-msg').textContent = "Camera nu există!";
+                    document.getElementById('lobby-msg').textContent = "Camera nu există sau a expirat!";
                 }
             });
         }
@@ -349,6 +380,12 @@
             db.ref('rooms/' + roomCode).on('value', snapshot => {
                 const state = snapshot.val();
                 if(!state) return;
+
+                // Dacă suntem P1 și cineva tocmai s-a conectat, închidem lobby-ul
+                if(myRole === 'p1' && document.getElementById('lobby-screen').style.display !== 'none') {
+                    document.getElementById('lobby-screen').style.display = 'none';
+                    document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P1 (Host)`;
+                }
 
                 rowCriteria = state.rowCriteria;
                 colCriteria = state.colCriteria;
