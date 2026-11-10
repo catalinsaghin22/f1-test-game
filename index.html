@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Mini-Grid Prototip - 2 Players</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #e10600;
+            --cell-bg: #2a2a2a;
+            --p1-color: #ff4d4d;
+            --p1-bg: #3d1a1a;
+            --p2-color: #3399ff;
+            --p2-bg: #1a2a3d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 440px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .controls-top {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-ctrl {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #444;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-ctrl:hover {
+            border-color: var(--accent-color);
+            background-color: #2a2a2a;
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 440px;
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .player-badge {
+            font-weight: bold;
+            font-size: 0.95rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .player-badge.p1 { color: var(--p1-color); }
+        .player-badge.p2 { color: var(--p2-color); }
+
+        .player-badge.active-turn {
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            border: 1px solid currentColor;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: 110px 110px 110px 110px;
+            grid-template-rows: 60px 110px 110px 110px;
+            gap: 6px;
+            background-color: #222;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .header-cell {
+            background-color: #1a1a1a;
+            color: #ff1801;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4px;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .corner-cell { background-color: transparent; }
+
+        .cell {
+            background-color: var(--cell-bg);
+            border: 2px dashed #444;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #ccc;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .cell:hover {
+            border-color: var(--accent-color);
+            background-color: #323232;
+        }
+
+        .cell.selected {
+            border: 2px solid var(--accent-color);
+            background-color: #382020;
+        }
+
+        .cell.solved-p1 {
+            border: 2px solid var(--p1-color);
+            background-color: var(--p1-bg);
+            color: white;
+            font-size: 0.85rem;
+            border-style: solid;
+        }
+
+        .cell.solved-p2 {
+            border: 2px solid var(--p2-color);
+            background-color: var(--p2-bg);
+            color: white;
+            font-size: 0.85rem;
+            border-style: solid;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background-color: var(--card-bg);
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button.action-btn {
+            padding: 12px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.action-btn:hover {
+            background-color: #ff1801;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 1rem;
+            height: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1 id="main-title">F1 GRID 2 PLAYERS</h1>
+        <div class="controls-top">
+            <button class="btn-ctrl" onclick="generateNewGrid()" title="Joc Nou">🔄 <span id="reset-label">Reset</span></button>
+            <button class="btn-ctrl" onclick="toggleLanguage()">🌐 <span id="lang-label">EN</span></button>
+        </div>
+    </div>
+
+    <div class="scoreboard">
+        <div id="p1-badge" class="player-badge p1 active-turn">🔴 P1: <span id="p1-score">0</span></div>
+        <div id="p2-badge" class="player-badge p2">🔵 P2: <span id="p2-score">0</span></div>
+    </div>
+    
+    <div id="instructions">Rândul lui P1: Alege o căsuță și scrie un pilot!</div>
+
+    <div class="board" id="board"></div>
+
+    <div class="input-container">
+        <input type="text" id="driver-input" placeholder="Se încarcă baza de date..." disabled>
+        <button class="action-btn" id="submit-btn" onclick="checkDriver()" disabled>Verifică</button>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        let driversDB = [];
+        let selectedCell = null;
+        let currentLang = 'ro';
+        let rowCriteria = [];
+        let colCriteria = [];
+        
+        let currentPlayer = 1; // 1 or 2
+        let p1Score = 0;
+        let p2Score = 0;
+        let gridState = Array(3).fill(null).map(() => Array(3).fill(0)); // 0 = empty, 1 = P1, 2 = P2
+        let gameOver = false;
+
+        const teamPool = ["Ferrari", "McLaren", "Mercedes", "Red Bull", "Williams", "Renault", "Aston Martin"];
+        const nationalityPool = ["Spaniol", "Britanic", "German", "Brazilian", "Finlandez", "Francez", "Italian"];
+        const eraPool = ["2000s", "2010s", "2020s"];
+        const champPool = [
+            { type: "champ", val: true, labelRo: "Campion Mondial", labelEn: "World Champion" },
+            { type: "champ", val: false, labelRo: "Fără Titlu", labelEn: "No Title" }
+        ];
+
+        const translations = {
+            ro: {
+                title: "F1 GRID 2 PLAYERS",
+                turnP1: "Rândul lui P1 🔴: Alege o căsuță și trimite pilotul!",
+                turnP2: "Rândul lui P2 🔵: Alege o căsuță și trimite pilotul!",
+                placeholder: "Scrie pilotul...",
+                loading: "Se încarcă baza de date...",
+                submitBtn: "Verifică",
+                resetBtn: "Reset",
+                notFound: "❌ Pilot negăsit în baza de date! Tura trece la celălalt jucător.",
+                correct: "Corect! Punct pentru",
+                wrongMatch: "nu se potrivește! Tura trece la celălalt jucător.",
+                p1Win: "🏆 JUCĂTORUL 1 (🔴) A CÂȘTIGAT!",
+                p2Win: "🏆 JUCĂTORUL 2 (🔵) A CÂȘTIGAT!",
+                draw: "🤝 EGALITATE! Toate celulele au fost completate.",
+                serverError: "⚠️ Deschide proiectul folosind un server local (Live Server)!"
+            },
+            en: {
+                title: "F1 GRID 2 PLAYERS",
+                turnP1: "P1's Turn 🔴: Pick a cell and submit driver!",
+                turnP2: "P2's Turn 🔵: Pick a cell and submit driver!",
+                placeholder: "Type driver...",
+                loading: "Loading database...",
+                submitBtn: "Check",
+                resetBtn: "Reset",
+                notFound: "❌ Driver not found! Turn passes to the other player.",
+                correct: "Correct! Point for",
+                wrongMatch: "does not match! Turn passes to the other player.",
+                p1Win: "🏆 PLAYER 1 (🔴) WINS!",
+                p2Win: "🏆 PLAYER 2 (🔵) WINS!",
+                draw: "🤝 DRAW! All cells are filled.",
+                serverError: "⚠️ Open the project using a local server (Live Server)!"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ro' ? 'en' : 'ro';
+            document.getElementById('lang-label').textContent = currentLang === 'ro' ? 'EN' : 'RO';
+            document.getElementById('reset-label').textContent = translations[currentLang].resetBtn;
+            updateTexts();
+            renderBoardUI();
+        }
+
+        function updateTexts() {
+            const t = translations[currentLang];
+            document.getElementById('main-title').textContent = t.title;
+            document.getElementById('submit-btn').textContent = t.submitBtn;
+
+            if (!gameOver) {
+                document.getElementById('instructions').textContent = currentPlayer === 1 ? t.turnP1 : t.turnP2;
+            }
+            
+            const input = document.getElementById('driver-input');
+            if (!input.disabled && driversDB.length > 0) {
+                input.placeholder = t.placeholder;
+            } else if (driversDB.length === 0) {
+                input.placeholder = t.loading;
+            }
+        }
+
+        function updateTurnUI() {
+            const p1B = document.getElementById('p1-badge');
+            const p2B = document.getElementById('p2-badge');
+            const t = translations[currentLang];
+
+            if (currentPlayer === 1) {
+                p1B.classList.add('active-turn');
+                p2B.classList.remove('active-turn');
+                if (!gameOver) document.getElementById('instructions').textContent = t.turnP1;
+            } else {
+                p2B.classList.add('active-turn');
+                p1B.classList.remove('active-turn');
+                if (!gameOver) document.getElementById('instructions').textContent = t.turnP2;
+            }
+        }
+
+        function getRandomItems(array, count) {
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function createCriterion(category, value) {
+            let labelRo = "", labelEn = "";
+            if (category === 'team') { labelRo = value; labelEn = value; }
+            else if (category === 'nationality') { labelRo = value; labelEn = value; }
+            else if (category === 'era') { labelRo = `Era ${value}`; labelEn = `${value} Era`; }
+            else if (category === 'champ') {
+                labelRo = value ? "Campion Mondial" : "Fără Titlu";
+                labelEn = value ? "World Champion" : "No Title";
+            }
+            return { category, value, labelRo, labelEn };
+        }
+
+        function driverMatchesCriterion(driver, crit) {
+            if (crit.category === 'team') return driver.teams.includes(crit.value);
+            if (crit.category === 'nationality') return driver.nationality === crit.value;
+            if (crit.category === 'era') return driver.eras.includes(crit.value);
+            if (crit.category === 'champ') {
+                const isChamp = driver.championships > 0;
+                return isChamp === crit.value;
+            }
+            return false;
+        }
+
+        function getIntersectionCount(rowCrit, colCrit) {
+            return driversDB.filter(d => driverMatchesCriterion(d, rowCrit) && driverMatchesCriterion(d, colCrit)).length;
+        }
+
+        function generateNewGrid() {
+            if (driversDB.length === 0) return;
+
+            selectedCell = null;
+            currentPlayer = 1;
+            p1Score = 0;
+            p2Score = 0;
+            gameOver = false;
+            gridState = Array(3).fill(null).map(() => Array(3).fill(0));
+
+            document.getElementById('p1-score').textContent = "0";
+            document.getElementById('p2-score').textContent = "0";
+            document.getElementById('message').textContent = "";
+            
+            const input = document.getElementById('driver-input');
+            input.value = "";
+            input.disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+
+            let validGrid = false;
+            let attempts = 0;
+            const allTypes = ['team', 'nationality', 'era', 'champ'];
+
+            while (!validGrid && attempts < 200) {
+                attempts++;
+                let rTypes = getRandomItems(allTypes, 3);
+                let cTypes = getRandomItems(allTypes, 3);
+
+                let rItems = rTypes.map(type => {
+                    if (type === 'team') return createCriterion('team', getRandomItems(teamPool, 1)[0]);
+                    if (type === 'nationality') return createCriterion('nationality', getRandomItems(nationalityPool, 1)[0]);
+                    if (type === 'era') return createCriterion('era', getRandomItems(eraPool, 1)[0]);
+                    if (type === 'champ') return createCriterion('champ', getRandomItems(champPool, 1)[0].val);
+                });
+
+                let cItems = cTypes.map(type => {
+                    if (type === 'team') return createCriterion('team', getRandomItems(teamPool, 1)[0]);
+                    if (type === 'nationality') return createCriterion('nationality', getRandomItems(nationalityPool, 1)[0]);
+                    if (type === 'era') return createCriterion('era', getRandomItems(eraPool, 1)[0]);
+                    if (type === 'champ') return createCriterion('champ', getRandomItems(champPool, 1)[0].val);
+                });
+
+                let matrixValid = true;
+                for (let r = 0; r < 3; r++) {
+                    for (let c = 0; c < 3; c++) {
+                        if (getIntersectionCount(rItems[r], cItems[c]) === 0) {
+                            matrixValid = false;
+                            break;
+                        }
+                    }
+                    if (!matrixValid) break;
+                }
+
+                if (matrixValid) {
+                    rowCriteria = rItems;
+                    colCriteria = cItems;
+                    validGrid = true;
+                }
+            }
+
+            updateTurnUI();
+            renderBoardUI();
+        }
+
+        function renderBoardUI() {
+            const boardEl = document.getElementById('board');
+            boardEl.innerHTML = "";
+
+            const corner = document.createElement('div');
+            corner.className = 'header-cell corner-cell';
+            boardEl.appendChild(corner);
+
+            colCriteria.forEach(col => {
+                const th = document.createElement('div');
+                th.className = 'header-cell';
+                th.textContent = currentLang === 'ro' ? col.labelRo : col.labelEn;
+                boardEl.appendChild(th);
+            });
+
+            rowCriteria.forEach((row, rIndex) => {
+                const rh = document.createElement('div');
+                rh.className = 'header-cell';
+                rh.textContent = currentLang === 'ro' ? row.labelRo : row.labelEn;
+                boardEl.appendChild(rh);
+
+                colCriteria.forEach((col, cIndex) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = rIndex;
+                    cell.dataset.col = cIndex;
+
+                    const pOwner = gridState[rIndex][cIndex];
+                    if (pOwner === 1) {
+                        cell.classList.add('solved-p1');
+                    } else if (pOwner === 2) {
+                        cell.classList.add('solved-p2');
+                    }
+
+                    cell.onclick = () => selectCell(cell);
+                    cell.innerHTML = `${currentLang === 'ro' ? row.labelRo : row.labelEn}<br>+<br>${currentLang === 'ro' ? col.labelRo : col.labelEn}`;
+                    boardEl.appendChild(cell);
+                });
+            });
+        }
+
+        fetch('drivers.json')
+            .then(response => response.json())
+            .then(data => {
+                driversDB = data;
+                updateTexts();
+                generateNewGrid();
+            })
+            .catch(error => {
+                console.error("Eroare la încărcarea drivers.json:", error);
+                document.getElementById('message').textContent = translations[currentLang].serverError;
+            });
+
+        function selectCell(cell) {
+            if (gameOver || cell.classList.contains('solved-p1') || cell.classList.contains('solved-p2')) return;
+
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
+            selectedCell = cell;
+            cell.classList.add('selected');
+
+            const input = document.getElementById('driver-input');
+            const btn = document.getElementById('submit-btn');
+            input.disabled = false;
+            btn.disabled = false;
+            input.placeholder = translations[currentLang].placeholder;
+            input.focus();
+            document.getElementById('message').textContent = "";
+        }
+
+        function checkWinCondition() {
+            // Verificare linii, coloane și diagonale (Tic-Tac-Toe style)
+            const lines = [
+                // Rânduri
+                [[0,0], [0,1], [0,2]],
+                [[1,0], [1,1], [1,2]],
+                [[2,0], [2,1], [2,2]],
+                // Coloane
+                [[0,0], [1,0], [2,0]],
+                [[0,1], [1,1], [2,1]],
+                [[0,2], [1,2], [2,2]],
+                // Diagonale
+                [[0,0], [1,1], [2,2]],
+                [[0,2], [1,1], [2,0]]
+            ];
+
+            for (let line of lines) {
+                const [a, b, c] = line;
+                const p = gridState[a[0]][a[1]];
+                if (p !== 0 && p === gridState[b[0]][b[1]] && p === gridState[c[0]][c[1]]) {
+                    return p; // Câștigător prin linie de 3
+                }
+            }
+
+            // Verificare dacă grila este plină
+            let isFull = true;
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    if (gridState[r][c] === 0) isFull = false;
+                }
+            }
+
+            if (isFull) {
+                if (p1Score > p2Score) return 1;
+                if (p2Score > p1Score) return 2;
+                return 3; // Egalitate
+            }
+
+            return 0; // Jocul continuă
+        }
+
+        function checkDriver() {
+            if (!selectedCell || gameOver) return;
+
+            const inputVal = document.getElementById('driver-input').value.trim().toLowerCase();
+            const messageEl = document.getElementById('message');
+            const t = translations[currentLang];
+
+            const matchedDriver = driversDB.find(d => d.name.toLowerCase().includes(inputVal));
+
+            if (!matchedDriver) {
+                messageEl.style.color = "#e10600";
+                messageEl.textContent = t.notFound;
+                switchTurn();
+                return;
+            }
+
+            const rIdx = parseInt(selectedCell.dataset.row);
+            const cIdx = parseInt(selectedCell.dataset.col);
+
+            const rowCrit = rowCriteria[rIdx];
+            const colCrit = colCriteria[cIdx];
+
+            const matchesRow = driverMatchesCriterion(matchedDriver, rowCrit);
+            const matchesCol = driverMatchesCriterion(matchedDriver, colCrit);
+
+            if (matchesRow && matchesCol) {
+                messageEl.style.color = "#00d2be";
+                messageEl.textContent = `${t.correct} P${currentPlayer}! (${matchedDriver.name}) 🏆`;
+
+                gridState[rIdx][cIdx] = currentPlayer;
+                selectedCell.textContent = matchedDriver.name;
+                selectedCell.classList.remove('selected');
+                selectedCell.classList.add(currentPlayer === 1 ? 'solved-p1' : 'solved-p2');
+
+                if (currentPlayer === 1) {
+                    p1Score++;
+                    document.getElementById('p1-score').textContent = p1Score;
+                } else {
+                    p2Score++;
+                    document.getElementById('p2-score').textContent = p2Score;
+                }
+
+                const winResult = checkWinCondition();
+                if (winResult !== 0) {
+                    gameOver = true;
+                    if (winResult === 1) messageEl.textContent = t.p1Win;
+                    else if (winResult === 2) messageEl.textContent = t.p2Win;
+                    else messageEl.textContent = t.draw;
+
+                    document.getElementById('instructions').textContent = "Game Over! Apasă Reset pentru un joc nou.";
+                    document.getElementById('driver-input').disabled = true;
+                    document.getElementById('submit-btn').disabled = true;
+                    return;
+                }
+
+                switchTurn();
+            } else {
+                messageEl.style.color = "#e10600";
+                messageEl.textContent = `❌ ${matchedDriver.name} ${t.wrongMatch}`;
+                switchTurn();
+            }
+        }
+
+        function switchTurn() {
+            selectedCell = null;
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
+            document.getElementById('driver-input').value = "";
+            document.getElementById('driver-input').disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            updateTurnUI();
+        }
+
+        document.getElementById('driver-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkDriver();
+            }
+        });
+    </script>
+</body>
+</html>
