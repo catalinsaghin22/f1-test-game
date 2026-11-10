@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 GRID ONLINE - Firebase PvP</title>
+    <title>F1 GRID ONLINE - PvP</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -34,7 +34,7 @@
         #lobby-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(18, 18, 18, 0.96);
+            background-color: rgba(18, 18, 18, 0.98);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -58,7 +58,6 @@
         .lobby-card input:focus { outline: none; border-color: var(--accent-color); }
         .lobby-card button { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 1rem; transition: background 0.2s;}
         .lobby-card button:hover { background-color: #ff1801; }
-        .lobby-card button:disabled { background-color: #555; cursor: not-allowed; }
 
         .header-container {
             display: flex;
@@ -185,19 +184,25 @@
     <div id="lobby-screen">
         <div class="lobby-card">
             <h2>F1 GRID ONLINE</h2>
-            <p id="db-status-text" style="color: #00d2be; font-size: 0.85rem; margin-bottom: 15px;">Se încarcă baza de date...</p>
+            <p id="status-lobby" style="color: #00d2be; font-size: 0.85rem; margin-bottom: 15px;">Gata de joc!</p>
             
-            <button id="create-btn" onclick="createRoom()" disabled>Creează Cameră Nouă</button>
+            <div id="create-section">
+                <button onclick="createRoom()">Creează Cameră Nouă</button>
+            </div>
+
             <div id="room-code-display" style="display:none; margin: 15px 0; background: #252525; padding: 10px; border-radius: 6px;">
                 <p style="margin:0; font-size:0.8rem; color:#aaa;">Codul camerei tale:</p>
                 <span id="display-code-text" style="font-size: 1.6rem; font-weight: bold; color: #00d2be; letter-spacing: 2px;"></span>
                 <p style="margin:5px 0 0 0; font-size:0.75rem; color:#e10600;">Așteptare conectare rival...</p>
             </div>
 
-            <hr style="border-color: #333; margin: 20px 0;">
+            <hr style="border-color: #333; margin: 20px 0;" id="lobby-divider">
             
-            <input type="text" id="room-code-input" placeholder="Cod (ex: A8B2)" maxlength="6">
-            <button id="join-btn" onclick="joinRoom()" disabled>Alătură-te în Cameră</button>
+            <div id="join-section">
+                <input type="text" id="room-code-input" placeholder="Cod (ex: A8B2)" maxlength="6">
+                <button onclick="joinRoom()">Alătură-te în Cameră</button>
+            </div>
+            
             <p id="lobby-msg" style="color: #e10600; font-size: 0.85rem; margin-top: 10px;"></p>
         </div>
     </div>
@@ -225,353 +230,492 @@
     <div id="message"></div>
 
     <script>
-        const firebaseConfig = {
-            databaseURL: "https://f1-grid-default-rtdb.europe-west1.firebasedatabase.app/"
+    const firebaseConfig = {
+        databaseURL: "https://f1-test-game-default-rtdb.europe-west1.firebasedatabase.app/"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const driversDB = [
+        { name: "Fernando Alonso", nationality: "Spaniol", championships: 2, teams: ["Ferrari", "McLaren", "Renault", "Aston Martin"], eras: ["2000s", "2010s", "2020s"] },
+        { name: "Lewis Hamilton", nationality: "Britanic", championships: 7, teams: ["McLaren", "Mercedes"], eras: ["2000s", "2010s", "2020s"] },
+        { name: "Sebastian Vettel", nationality: "German", championships: 4, teams: ["Red Bull", "Ferrari", "Aston Martin"], eras: ["2000s", "2010s", "2020s"] },
+        { name: "Michael Schumacher", nationality: "German", championships: 7, teams: ["Ferrari", "Mercedes"], eras: ["2000s"] },
+        { name: "Kimi Räikkönen", nationality: "Finlandez", championships: 1, teams: ["Ferrari", "McLaren", "Renault"], eras: ["2000s", "2010s"] },
+        { name: "Jenson Button", nationality: "Britanic", championships: 1, teams: ["Williams", "McLaren", "Renault"], eras: ["2000s", "2010s"] },
+        { name: "Nico Rosberg", nationality: "German", championships: 1, teams: ["Mercedes", "Williams"], eras: ["2000s", "2010s"] },
+        { name: "Max Verstappen", nationality: "Holandez", championships: 3, teams: ["Red Bull"], eras: ["2010s", "2020s"] },
+        { name: "Charles Leclerc", nationality: "Monegasq", championships: 0, teams: ["Ferrari"], eras: ["2010s", "2020s"] },
+        { name: "Lando Norris", nationality: "Britanic", championships: 0, teams: ["McLaren"], eras: ["2010s", "2020s"] },
+        { name: "Carlos Sainz", nationality: "Spaniol", championships: 0, teams: ["Ferrari", "McLaren", "Williams"], eras: ["2010s", "2020s"] },
+        { name: "George Russell", nationality: "Britanic", championships: 0, teams: ["Mercedes", "Williams"], eras: ["2010s", "2020s"] },
+        { name: "Sergio Pérez", nationality: "Mexican", championships: 0, teams: ["Red Bull", "McLaren"], eras: ["2010s", "2020s"] },
+        { name: "Valtteri Bottas", nationality: "Finlandez", championships: 0, teams: ["Mercedes", "Williams"], eras: ["2010s", "2020s"] },
+        { name: "Daniel Ricciardo", nationality: "Australian", championships: 0, teams: ["Red Bull", "Renault", "McLaren"], eras: ["2010s", "2020s"] },
+        { name: "Felipe Massa", nationality: "Brazilian", championships: 0, teams: ["Ferrari", "Williams"], eras: ["2000s", "2010s"] },
+        { name: "Rubens Barrichello", nationality: "Brazilian", championships: 0, teams: ["Ferrari", "Williams"], eras: ["2000s", "2010s"] },
+        { name: "Mark Webber", nationality: "Australian", championships: 0, teams: ["Red Bull", "Williams"], eras: ["2000s", "2010s"] },
+        { name: "Robert Kubica", nationality: "Polonez", championships: 0, teams: ["Williams", "Renault"], eras: ["2000s", "2010s"] }
+    ];
+
+    const teamPool = ["Ferrari", "McLaren", "Mercedes", "Red Bull", "Williams", "Renault", "Aston Martin"];
+    const nationalityPool = ["Spaniol", "Britanic", "German", "Brazilian", "Finlandez"];
+    const eraPool = ["2000s", "2010s", "2020s"];
+
+    let roomCode = null;
+    let myRole = null;
+    let selectedCell = null;
+    let rowCriteria = [];
+    let colCriteria = [];
+    let gridState = [];
+    let p1Score = 0;
+    let p2Score = 0;
+    let currentPlayer = 1;
+    let gameOver = false;
+    let timerInterval = null;
+    let timeLeft = 30;
+    let gameListener = null;
+
+    function generateRoomCode() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let code = "";
+        for (let i = 0; i < 4; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+
+    function createCriterion(category, value) {
+        let labelRo = value;
+
+        if (category === "era") labelRo = `Era ${value}`;
+        if (category === "champ") labelRo = value ? "Campion Mondial" : "Fără Titlu";
+
+        return { category, value, labelRo };
+    }
+
+    function generateUniqueCriteria(count) {
+        const list = [];
+        const used = new Set();
+        const types = ["team", "nationality", "era", "champ"];
+
+        while (list.length < count) {
+            const type = types[Math.floor(Math.random() * types.length)];
+            let value;
+
+            if (type === "team") value = teamPool[Math.floor(Math.random() * teamPool.length)];
+            if (type === "nationality") value = nationalityPool[Math.floor(Math.random() * nationalityPool.length)];
+            if (type === "era") value = eraPool[Math.floor(Math.random() * eraPool.length)];
+            if (type === "champ") value = Math.random() < 0.5;
+
+            const key = `${type}-${value}`;
+
+            if (!used.has(key)) {
+                used.add(key);
+                list.push(createCriterion(type, value));
+            }
+        }
+
+        return list;
+    }
+
+    function driverMatches(driver, criterion) {
+        if (criterion.category === "team") return driver.teams.includes(criterion.value);
+        if (criterion.category === "nationality") return driver.nationality === criterion.value;
+        if (criterion.category === "era") return driver.eras.includes(criterion.value);
+        if (criterion.category === "champ") return (driver.championships > 0) === criterion.value;
+        return false;
+    }
+
+    function createNewGameData() {
+        let rowCriteria;
+        let colCriteria;
+        let valid = false;
+        let attempts = 0;
+
+        while (!valid && attempts < 300) {
+            attempts++;
+
+            const all = generateUniqueCriteria(6);
+            rowCriteria = all.slice(0, 3);
+            colCriteria = all.slice(3, 6);
+
+            valid = true;
+
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    const matches = driversDB.filter(driver =>
+                        driverMatches(driver, rowCriteria[r]) &&
+                        driverMatches(driver, colCriteria[c])
+                    );
+
+                    if (matches.length === 0) valid = false;
+                }
+            }
+        }
+
+        return {
+            rowCriteria,
+            colCriteria,
+            gridState: [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+            ],
+            p1Score: 0,
+            p2Score: 0,
+            currentPlayer: 1,
+            gameOver: false,
+            players: 1,
+            createdAt: Date.now()
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    }
 
-        let driversDB = [];
-        let roomCode = null;
-        let myRole = null; 
-        let selectedCell = null;
-        let rowCriteria = [];
-        let colCriteria = [];
-        let gridState = Array(3).fill(null).map(() => Array(3).fill(0));
-        let p1Score = 0;
-        let p2Score = 0;
-        let currentPlayer = 1;
-        let gameOver = false;
-        let timerInterval = null;
-        let timeLeft = 30;
+    async function createRoom() {
+        roomCode = generateRoomCode();
+        myRole = "p1";
 
-        const teamPool = ["Ferrari", "McLaren", "Mercedes", "Red Bull", "Williams", "Renault", "Aston Martin"];
-        const nationalityPool = ["Spaniol", "Britanic", "German", "Brazilian", "Finlandez", "Francez", "Italian"];
-        const eraPool = ["2000s", "2010s", "2020s"];
-        const champPool = [
-            { type: "champ", val: true, labelRo: "Campion Mondial", labelEn: "World Champion" },
-            { type: "champ", val: false, labelRo: "Fără Titlu", labelEn: "No Title" }
+        const gameData = createNewGameData();
+
+        try {
+            await db.ref(`rooms/${roomCode}`).set(gameData);
+
+            document.getElementById("join-section").style.display = "none";
+            document.getElementById("create-section").style.display = "none";
+            document.getElementById("lobby-divider").style.display = "none";
+
+            document.getElementById("room-code-display").style.display = "block";
+            document.getElementById("display-code-text").textContent = roomCode;
+            document.getElementById("status-lobby").textContent = "Cameră creată. Așteptăm P2...";
+
+            initGameListener();
+        } catch (error) {
+            console.error(error);
+            document.getElementById("lobby-msg").textContent =
+                "Eroare la crearea camerei. Verifică regulile Firebase / conexiunea.";
+        }
+    }
+
+    async function joinRoom() {
+        const code = document.getElementById("room-code-input").value.trim().toUpperCase();
+
+        if (!code) {
+            document.getElementById("lobby-msg").textContent = "Introdu un cod valid!";
+            return;
+        }
+
+        try {
+            const snapshot = await db.ref(`rooms/${code}`).get();
+
+            if (!snapshot.exists()) {
+                document.getElementById("lobby-msg").textContent = "Camera nu există!";
+                return;
+            }
+
+            const room = snapshot.val();
+
+            if (room.players >= 2) {
+                document.getElementById("lobby-msg").textContent = "Camera este plină!";
+                return;
+            }
+
+            roomCode = code;
+            myRole = "p2";
+
+            await db.ref(`rooms/${code}`).update({
+                players: 2
+            });
+
+            document.getElementById("lobby-screen").style.display = "none";
+            document.getElementById("room-display-info").textContent =
+                `Cod Cameră: ${roomCode} | Ești: P2 (Guest)`;
+
+            initGameListener();
+        } catch (error) {
+            console.error(error);
+            document.getElementById("lobby-msg").textContent = "Eroare la conectare.";
+        }
+    }
+
+    function initGameListener() {
+        if (gameListener) gameListener();
+
+        gameListener = db.ref(`rooms/${roomCode}`).on("value", snapshot => {
+            const state = snapshot.val();
+            if (!state) return;
+
+            rowCriteria = state.rowCriteria || [];
+            colCriteria = state.colCriteria || [];
+            gridState = normalizeGrid(state.gridState);
+            p1Score = state.p1Score || 0;
+            p2Score = state.p2Score || 0;
+            currentPlayer = state.currentPlayer || 1;
+            gameOver = Boolean(state.gameOver);
+
+            document.getElementById("p1-score").textContent = p1Score;
+            document.getElementById("p2-score").textContent = p2Score;
+
+            if (myRole === "p1" && state.players === 2) {
+                document.getElementById("lobby-screen").style.display = "none";
+                document.getElementById("room-display-info").textContent =
+                    `Cod Cameră: ${roomCode} | Ești: P1 (Host)`;
+            }
+
+            renderBoard();
+            updateTurnState();
+        });
+    }
+
+    function normalizeGrid(value) {
+        const empty = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
         ];
 
-        // Încărcare sigură a bazei de date
-        fetch('drivers.json')
-            .then(res => res.json())
-            .then(data => {
-                driversDB = data;
-                document.getElementById('db-status-text').textContent = "Baza de date pregătită!";
-                document.getElementById('create-btn').disabled = false;
-                document.getElementById('join-btn').disabled = false;
-            })
-            .catch(err => {
-                console.error("Eroare JSON:", err);
-                document.getElementById('db-status-text').textContent = "Eroare la încărcarea bazei de date!";
-            });
+        if (!value) return empty;
 
-        function generateRoomCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let code = '';
-            for(let i=0; i<4; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-            return code;
-        }
+        return [
+            normalizeRow(value[0] || value["0"]),
+            normalizeRow(value[1] || value["1"]),
+            normalizeRow(value[2] || value["2"])
+        ];
+    }
 
-        function createCriterion(category, value) {
-            let labelRo = value, labelEn = value;
-            if (category === 'era') { labelRo = `Era ${value}`; labelEn = `${value} Era`; }
-            else if (category === 'champ') {
-                labelRo = value ? "Campion Mondial" : "Fără Titlu";
-                labelEn = value ? "World Champion" : "No Title";
-            }
-            return { category, value, labelRo, labelEn };
-        }
+    function normalizeRow(row) {
+        return [
+            Number(row?.[0] ?? row?.["0"] ?? 0),
+            Number(row?.[1] ?? row?.["1"] ?? 0),
+            Number(row?.[2] ?? row?.["2"] ?? 0)
+        ];
+    }
 
-        function generateUniqueCriteria(count) {
-            const list = [];
-            const used = new Set();
-            const types = ['team', 'nationality', 'era', 'champ'];
-            while (list.length < count) {
-                const t = types[Math.floor(Math.random()*types.length)];
-                let crit;
-                if (t==='team') crit = createCriterion('team', teamPool[Math.floor(Math.random()*teamPool.length)]);
-                else if (t==='nationality') crit = createCriterion('nationality', nationalityPool[Math.floor(Math.random()*nationalityPool.length)]);
-                else if (t==='era') crit = createCriterion('era', eraPool[Math.floor(Math.random()*eraPool.length)]);
-                else crit = createCriterion('champ', champPool[Math.floor(Math.random()*champPool.length)].val);
+    function renderBoard() {
+        const boardEl = document.getElementById("board");
+        boardEl.innerHTML = "";
 
-                const key = `${crit.category}-${crit.value}`;
-                if(!used.has(key)) { used.add(key); list.push(crit); }
-            }
-            return list;
-        }
+        const corner = document.createElement("div");
+        corner.className = "header-cell corner-cell";
+        boardEl.appendChild(corner);
 
-        function driverMatches(driver, crit) {
-            if (crit.category === 'team') return driver.teams.includes(crit.value);
-            if (crit.category === 'nationality') return driver.nationality === crit.value;
-            if (crit.category === 'era') return driver.eras.includes(crit.value);
-            if (crit.category === 'champ') return (driver.championships > 0) === crit.value;
-            return false;
-        }
+        colCriteria.forEach(column => {
+            const header = document.createElement("div");
+            header.className = "header-cell";
+            header.textContent = column.labelRo;
+            boardEl.appendChild(header);
+        });
 
-        function createNewGameData() {
-            let valid = false;
-            let rItems, cItems;
-            let attempts = 0;
-            while(!valid && attempts < 200) {
-                attempts++;
-                let all = generateUniqueCriteria(6);
-                rItems = all.slice(0,3);
-                cItems = all.slice(3,6);
-                valid = true;
-                for(let r=0; r<3; r++) {
-                    for(let c=0; c<3; c++) {
-                        if(driversDB.filter(d => driverMatches(d, rItems[r]) && driverMatches(d, cItems[c])).length === 0) valid = false;
-                    }
-                }
-            }
-            return {
-                rowCriteria: rItems,
-                colCriteria: cItems,
-                gridState: Array(3).fill(null).map(() => Array(3).fill(0)),
-                p1Score: 0,
-                p2Score: 0,
-                currentPlayer: 1,
-                gameOver: false
-            };
-        }
+        rowCriteria.forEach((row, rowIndex) => {
+            const rowHeader = document.createElement("div");
+            rowHeader.className = "header-cell";
+            rowHeader.textContent = row.labelRo;
+            boardEl.appendChild(rowHeader);
 
-        function createRoom() {
-            if(driversDB.length === 0) { alert("Așteaptă încărcarea bazei de date!"); return; }
-            roomCode = generateRoomCode();
-            myRole = 'p1';
-            
-            const gameData = createNewGameData();
-            db.ref('rooms/' + roomCode).set(gameData).then(() => {
-                // Ascundem butonul de creare și afișăm codul generat
-                document.getElementById('create-btn').style.display = 'none';
-                document.getElementById('room-code-input').style.display = 'none';
-                document.getElementById('join-btn').style.display = 'none';
-                document.getElementById('room-code-display').style.display = 'block';
-                document.getElementById('display-code-text').textContent = roomCode;
-                
-                initGameListener();
-            }).catch(err => {
-                console.error("Eroare Firebase set:", err);
-                alert("Eroare la crearea camerei în rețea.");
-            });
-        }
+            colCriteria.forEach((column, columnIndex) => {
+                const cell = document.createElement("div");
+                cell.className = "cell";
+                cell.dataset.row = rowIndex;
+                cell.dataset.col = columnIndex;
 
-        function joinRoom() {
-            if(driversDB.length === 0) { alert("Așteaptă încărcarea bazei de date!"); return; }
-            const code = document.getElementById('room-code-input').value.trim().toUpperCase();
-            if(!code) { document.getElementById('lobby-msg').textContent = "Introdu un cod valid!"; return; }
-            
-            db.ref('rooms/' + code).once('value', snapshot => {
-                if(snapshot.exists()) {
-                    roomCode = code;
-                    myRole = 'p2';
-                    document.getElementById('lobby-screen').style.display = 'none';
-                    document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P2 (Guest)`;
-                    initGameListener();
+                const owner = gridState[rowIndex][columnIndex];
+
+                if (owner === 1) {
+                    cell.classList.add("solved-p1");
+                    cell.textContent = "P1 🔴";
+                } else if (owner === 2) {
+                    cell.classList.add("solved-p2");
+                    cell.textContent = "P2 🔵";
                 } else {
-                    document.getElementById('lobby-msg').textContent = "Camera nu există sau a expirat!";
-                }
-            });
-        }
-
-        function initGameListener() {
-            db.ref('rooms/' + roomCode).on('value', snapshot => {
-                const state = snapshot.val();
-                if(!state) return;
-
-                // Dacă suntem P1 și cineva tocmai s-a conectat, închidem lobby-ul
-                if(myRole === 'p1' && document.getElementById('lobby-screen').style.display !== 'none') {
-                    document.getElementById('lobby-screen').style.display = 'none';
-                    document.getElementById('room-display-info').textContent = `Cod Cameră: ${roomCode} | Ești: P1 (Host)`;
+                    cell.innerHTML = `${row.labelRo}<br>+<br>${column.labelRo}`;
                 }
 
-                rowCriteria = state.rowCriteria;
-                colCriteria = state.colCriteria;
-                gridState = state.gridState;
-                p1Score = state.p1Score;
-                p2Score = state.p2Score;
-                currentPlayer = state.currentPlayer;
-                gameOver = state.gameOver;
-
-                document.getElementById('p1-score').textContent = p1Score;
-                document.getElementById('p2-score').textContent = p2Score;
-
-                renderBoard();
-                updateTurnState();
+                cell.onclick = () => selectCell(cell, rowIndex, columnIndex);
+                boardEl.appendChild(cell);
             });
+        });
+    }
+
+    function selectCell(cell, rowIndex, columnIndex) {
+        if (gameOver) return;
+
+        const myPlayer = myRole === "p1" ? 1 : 2;
+
+        if (currentPlayer !== myPlayer) {
+            document.getElementById("message").textContent = "Nu este rândul tău!";
+            return;
         }
 
-        function renderBoard() {
-            const boardEl = document.getElementById('board');
-            boardEl.innerHTML = "";
+        if (gridState[rowIndex][columnIndex] !== 0) return;
 
-            const corner = document.createElement('div');
-            corner.className = 'header-cell corner-cell';
-            boardEl.appendChild(corner);
+        document.querySelectorAll(".cell").forEach(item => item.classList.remove("selected"));
 
-            colCriteria.forEach(col => {
-                const th = document.createElement('div');
-                th.className = 'header-cell';
-                th.textContent = col.labelRo;
-                boardEl.appendChild(th);
-            });
+        selectedCell = {
+            cell,
+            r: rowIndex,
+            c: columnIndex
+        };
 
-            rowCriteria.forEach((row, rIdx) => {
-                const rh = document.createElement('div');
-                rh.className = 'header-cell';
-                rh.textContent = row.labelRo;
-                boardEl.appendChild(rh);
+        cell.classList.add("selected");
 
-                colCriteria.forEach((col, cIdx) => {
-                    const cell = document.createElement('div');
-                    cell.className = 'cell';
-                    cell.dataset.row = rIdx;
-                    cell.dataset.col = cIdx;
+        const input = document.getElementById("driver-input");
+        input.disabled = false;
+        document.getElementById("submit-btn").disabled = false;
+        input.placeholder = "Scrie pilotul...";
+        input.focus();
+    }
 
-                    const owner = gridState[rIdx][cIdx];
-                    if(owner === 1) cell.classList.add('solved-p1');
-                    if(owner === 2) cell.classList.add('solved-p2');
+    function updateTurnState() {
+        const p1Badge = document.getElementById("p1-badge");
+        const p2Badge = document.getElementById("p2-badge");
+        const instructions = document.getElementById("instructions");
+        const input = document.getElementById("driver-input");
+        const submitButton = document.getElementById("submit-btn");
 
-                    if(owner !== 0) {
-                        cell.textContent = owner === 1 ? "P1 🔴" : "P2 🔵";
-                    } else {
-                        cell.innerHTML = `${row.labelRo}<br>+<br>${col.labelRo}`;
-                    }
+        const myPlayer = myRole === "p1" ? 1 : 2;
+        const isMyTurn = currentPlayer === myPlayer;
 
-                    cell.onclick = () => selectCell(cell, rIdx, cIdx);
-                    boardEl.appendChild(cell);
-                });
-            });
-        }
+        p1Badge.classList.toggle("active-turn", currentPlayer === 1);
+        p2Badge.classList.toggle("active-turn", currentPlayer === 2);
 
-        function selectCell(cell, r, c) {
-            if(gameOver) return;
-            if(currentPlayer !== (myRole === 'p1' ? 1 : 2)) {
-                document.getElementById('message').textContent = "Nu este rândul tău!";
-                return;
-            }
-            if(gridState[r][c] !== 0) return;
-
-            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
-            selectedCell = { cell, r, c };
-            cell.classList.add('selected');
-
-            const input = document.getElementById('driver-input');
-            input.disabled = false;
-            document.getElementById('submit-btn').disabled = false;
-            input.placeholder = "Scrie pilotul...";
-            input.focus();
-        }
-
-        function updateTurnState() {
-            const p1B = document.getElementById('p1-badge');
-            const p2B = document.getElementById('p2-badge');
-            const inst = document.getElementById('instructions');
-            const input = document.getElementById('driver-input');
-            const btn = document.getElementById('submit-btn');
-
-            const isMyTurn = currentPlayer === (myRole === 'p1' ? 1 : 2);
-
-            if(currentPlayer === 1) {
-                p1B.classList.add('active-turn'); p2B.classList.remove('active-turn');
-            } else {
-                p2B.classList.add('active-turn'); p1B.classList.remove('active-turn');
-            }
-
-            if(gameOver) {
-                inst.textContent = "Jocul s-a încheiat!";
-                input.disabled = true; btn.disabled = true;
-                return;
-            }
-
-            if(isMyTurn) {
-                inst.textContent = "Este rândul tău! Alege o căsuță.";
-                if(!selectedCell) { input.disabled = true; btn.disabled = true; }
-            } else {
-                inst.textContent = "Rândul adversarului... Așteaptă mutarea.";
-                input.disabled = true; btn.disabled = true;
-                selectedCell = null;
-            }
-
-            resetTimer();
-        }
-
-        function resetTimer() {
+        if (gameOver) {
+            instructions.textContent = "Jocul s-a încheiat!";
+            input.disabled = true;
+            submitButton.disabled = true;
             clearInterval(timerInterval);
-            timeLeft = 30;
-            const bar = document.getElementById('timer-bar');
-            bar.style.width = '100%';
-            bar.style.backgroundColor = '#00d2be';
-
-            if(gameOver) return;
-
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                bar.style.width = (timeLeft / 30 * 100) + '%';
-                if(timeLeft <= 10) bar.style.backgroundColor = '#e10600';
-
-                if(timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    if(currentPlayer === (myRole === 'p1' ? 1 : 2)) {
-                        switchTurnAuto();
-                    }
-                }
-            }, 1000);
+            return;
         }
 
-        function switchTurnAuto() {
-            const nextP = currentPlayer === 1 ? 2 : 1;
-            db.ref('rooms/' + roomCode).update({ currentPlayer: nextP });
+        if (isMyTurn) {
+            instructions.textContent = "Este rândul tău! Alege o căsuță.";
+
+            if (!selectedCell) {
+                input.disabled = true;
+                submitButton.disabled = true;
+            }
+        } else {
+            instructions.textContent = "Rândul adversarului... Așteaptă mutarea.";
+            input.disabled = true;
+            submitButton.disabled = true;
+            selectedCell = null;
         }
 
-        function checkDriver() {
-            if(!selectedCell || gameOver) return;
-            const val = document.getElementById('driver-input').value.trim().toLowerCase();
-            const driver = driversDB.find(d => d.name.toLowerCase().includes(val));
+        resetTimer();
+    }
 
-            const r = selectedCell.r;
-            const c = selectedCell.c;
+    function resetTimer() {
+        clearInterval(timerInterval);
 
-            if(!driver || !driverMatches(driver, rowCriteria[r]) || !driverMatches(driver, colCriteria[c])) {
-                document.getElementById('message').style.color = "#e10600";
-                document.getElementById('message').textContent = "❌ Greșit sau negăsit! Tura se schimbă.";
-                switchTurnAuto();
-                resetInputState();
-                return;
+        timeLeft = 30;
+        const bar = document.getElementById("timer-bar");
+
+        bar.style.width = "100%";
+        bar.style.backgroundColor = "#00d2be";
+
+        if (gameOver) return;
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+
+            bar.style.width = `${(timeLeft / 30) * 100}%`;
+
+            if (timeLeft <= 10) {
+                bar.style.backgroundColor = "#e10600";
             }
 
-            gridState[r][c] = currentPlayer;
-            if(currentPlayer === 1) p1Score++; else p2Score++;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                switchTurnAuto();
+            }
+        }, 1000);
+    }
 
-            let nextP = currentPlayer === 1 ? 2 : 1;
-            let isFull = gridState.every(row => row.every(cell => cell !== 0));
+    function switchTurnAuto() {
+        if (!roomCode || gameOver) return;
 
-            db.ref('rooms/' + roomCode).update({
-                gridState: gridState,
-                p1Score: p1Score,
-                p2Score: p2Score,
-                currentPlayer: nextP,
+        const nextPlayer = currentPlayer === 1 ? 2 : 1;
+
+        db.ref(`rooms/${roomCode}`).update({
+            currentPlayer: nextPlayer
+        });
+    }
+
+    async function checkDriver() {
+        if (!selectedCell || gameOver) return;
+
+        const myPlayer = myRole === "p1" ? 1 : 2;
+
+        if (currentPlayer !== myPlayer) return;
+
+        const inputValue = document.getElementById("driver-input").value.trim().toLowerCase();
+
+        if (!inputValue) return;
+
+        const driver = driversDB.find(item =>
+            item.name.toLowerCase() === inputValue ||
+            item.name.toLowerCase().startsWith(inputValue)
+        );
+
+        const rowIndex = selectedCell.r;
+        const columnIndex = selectedCell.c;
+
+        const isValid =
+            driver &&
+            driverMatches(driver, rowCriteria[rowIndex]) &&
+            driverMatches(driver, colCriteria[columnIndex]);
+
+        if (!isValid) {
+            document.getElementById("message").style.color = "#e10600";
+            document.getElementById("message").textContent = "❌ Greșit sau negăsit! Tura se schimbă.";
+
+            resetInputState();
+            switchTurnAuto();
+            return;
+        }
+
+        const updatedGrid = gridState.map(row => [...row]);
+        updatedGrid[rowIndex][columnIndex] = myPlayer;
+
+        const updatedP1Score = myPlayer === 1 ? p1Score + 1 : p1Score;
+        const updatedP2Score = myPlayer === 2 ? p2Score + 1 : p2Score;
+
+        const isFull = updatedGrid.every(row => row.every(cell => cell !== 0));
+        const nextPlayer = myPlayer === 1 ? 2 : 1;
+
+        try {
+            await db.ref(`rooms/${roomCode}`).update({
+                gridState: updatedGrid,
+                p1Score: updatedP1Score,
+                p2Score: updatedP2Score,
+                currentPlayer: nextPlayer,
                 gameOver: isFull
             });
 
-            document.getElementById('message').style.color = "#00d2be";
-            document.getElementById('message').textContent = `Corect! (${driver.name}) 🏆`;
-            resetInputState();
+            document.getElementById("message").style.color = "#00d2be";
+            document.getElementById("message").textContent = `Corect! (${driver.name}) 🏆`;
+        } catch (error) {
+            console.error(error);
+            document.getElementById("message").textContent = "Eroare la salvarea mutării.";
         }
 
-        function resetInputState() {
-            selectedCell = null;
-            document.getElementById('driver-input').value = "";
-            document.getElementById('driver-input').disabled = true;
-            document.getElementById('submit-btn').disabled = true;
-            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
-        }
+        resetInputState();
+    }
 
-        document.getElementById('driver-input').addEventListener('keypress', e => {
-            if(e.key === 'Enter') checkDriver();
-        });
-    </script>
+    function resetInputState() {
+        selectedCell = null;
+
+        const input = document.getElementById("driver-input");
+        input.value = "";
+        input.disabled = true;
+
+        document.getElementById("submit-btn").disabled = true;
+
+        document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("selected"));
+    }
+
+    document.getElementById("driver-input").addEventListener("keypress", event => {
+        if (event.key === "Enter") checkDriver();
+    });
+</script>
 </body>
 </html>
