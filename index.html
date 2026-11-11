@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>F1 GRID ONLINE - PvP</title>
-
     <style>
         :root {
             --bg: #121212;
@@ -33,8 +31,7 @@
             align-items: center;
         }
 
-        button,
-        input {
+        button, input {
             font: inherit;
         }
 
@@ -99,8 +96,7 @@
             color: var(--accent);
         }
 
-        .lobby-card button,
-        .lobby-card input {
+        .lobby-card button, .lobby-card input {
             width: 100%;
             margin-top: 10px;
         }
@@ -182,13 +178,8 @@
             font-weight: bold;
         }
 
-        .p1 {
-            color: var(--p1);
-        }
-
-        .p2 {
-            color: var(--p2);
-        }
+        .p1 { color: var(--p1); }
+        .p2 { color: var(--p2); }
 
         .active-turn {
             border-color: currentColor;
@@ -228,8 +219,7 @@
             box-shadow: 0 8px 24px #0007;
         }
 
-        .header-cell,
-        .cell {
+        .header-cell, .cell {
             min-width: 0;
             min-height: 100px;
             padding: 7px;
@@ -249,8 +239,7 @@
             color: #ff392d;
         }
 
-        .column-header,
-        .corner-cell {
+        .column-header, .corner-cell {
             min-height: 60px;
         }
 
@@ -327,26 +316,10 @@
         }
 
         @media (max-width: 400px) {
-            .board {
-                gap: 4px;
-                padding: 5px;
-            }
-
-            .header-cell,
-            .cell {
-                min-height: 90px;
-                padding: 4px;
-                font-size: 0.7rem;
-            }
-
-            .column-header,
-            .corner-cell {
-                min-height: 55px;
-            }
-
-            .player-badge {
-                padding: 5px 8px;
-            }
+            .board { gap: 4px; padding: 5px; }
+            .header-cell, .cell { min-height: 90px; padding: 4px; font-size: 0.7rem; }
+            .column-header, .corner-cell { min-height: 55px; }
+            .player-badge { padding: 5px 8px; }
         }
     </style>
 
@@ -358,13 +331,10 @@
     <div id="lobby-screen">
         <div class="lobby-card">
             <h2>F1 GRID ONLINE</h2>
-
             <p id="status-lobby">Se încarcă lista de piloți...</p>
 
             <div id="create-section">
-                <button id="create-btn" disabled>
-                    Creează Cameră Nouă
-                </button>
+                <button id="create-btn" disabled>Creează Cameră Nouă</button>
             </div>
 
             <div id="room-code-display">
@@ -376,17 +346,8 @@
             <hr id="lobby-divider">
 
             <div id="join-section">
-                <input
-                    type="text"
-                    id="room-code-input"
-                    placeholder="Introdu codul camerei"
-                    maxlength="6"
-                    autocomplete="off"
-                >
-
-                <button id="join-btn" disabled>
-                    Alătură-te în Cameră
-                </button>
+                <input type="text" id="room-code-input" placeholder="Introdu codul camerei" maxlength="6" autocomplete="off">
+                <button id="join-btn" disabled>Alătură-te în Cameră</button>
             </div>
 
             <p id="lobby-msg" role="status"></p>
@@ -396,18 +357,11 @@
     <main class="game-container">
         <h1>F1 GRID ONLINE</h1>
 
-        <div class="room-info" id="room-display-info">
-            Neconectat
-        </div>
+        <div class="room-info" id="room-display-info">Neconectat</div>
 
         <div class="scoreboard">
-            <div id="p1-badge" class="player-badge p1">
-                P1: <span id="p1-score">0</span>
-            </div>
-
-            <div id="p2-badge" class="player-badge p2">
-                P2: <span id="p2-score">0</span>
-            </div>
+            <div id="p1-badge" class="player-badge p1">P1: <span id="p1-score">0</span></div>
+            <div id="p2-badge" class="player-badge p2">P2: <span id="p2-score">0</span></div>
         </div>
 
         <div class="timer-container">
@@ -419,22 +373,11 @@
         <div class="board" id="board"></div>
 
         <form class="input-container" id="answer-form">
-            <input
-                type="text"
-                id="driver-input"
-                placeholder="Alege o căsuță..."
-                autocomplete="off"
-                disabled
-            >
-
-            <button type="submit" id="submit-btn" disabled>
-                Trimite
-            </button>
+            <input type="text" id="driver-input" placeholder="Alege o căsuță..." autocomplete="off" disabled>
+            <button type="submit" id="submit-btn" disabled>Trimite</button>
         </form>
 
-        <p class="hint">
-            Poți scrie numele complet sau numele de familie, fără diacritice.
-        </p>
+        <p class="hint">Poți scrie prenumele, numele de familie sau numele complet (fără diacritice).</p>
 
         <div id="message" role="status"></div>
     </main>
@@ -443,8 +386,7 @@
         "use strict";
 
         const firebaseConfig = {
-            databaseURL:
-                "https://f1-test-game-default-rtdb.europe-west1.firebasedatabase.app/"
+            databaseURL: "https://f1-grid-default-rtdb.europe-west1.firebasedatabase.app/"
         };
 
         const TURN_DURATION = 30000;
@@ -483,20 +425,19 @@
                 .trim();
         }
 
+        // Căutare flexibilă după cuvinte (prenume / nume de familie)
         function findDrivers(value) {
             const query = normalizeName(value);
-
             if (!query) return [];
 
-            const exact = driversDB.filter(driver =>
-                normalizeName(driver.name) === query
-            );
-
+            // 1. Potrivire exactă pe tot numele
+            const exact = driversDB.filter(driver => normalizeName(driver.name) === query);
             if (exact.length > 0) return exact;
 
+            // 2. Potrivire dacă fragmentul introdus este un cuvânt de sine stătător din nume (ex: "alonso", "fernando")
             return driversDB.filter(driver => {
-                const name = normalizeName(driver.name);
-                return (` ${name} `).includes(` ${query} `);
+                const nameWords = normalizeName(driver.name).split(" ");
+                return nameWords.includes(query) || normalizeName(driver.name).includes(query);
             });
         }
 
@@ -506,16 +447,12 @@
             switch (criterion.category) {
                 case "team":
                     return driver.teams.includes(criterion.value);
-
                 case "nationality":
                     return driver.nationality === criterion.value;
-
                 case "era":
                     return driver.eras.includes(criterion.value);
-
                 case "champ":
                     return (driver.championships > 0) === criterion.value;
-
                 default:
                     return false;
             }
@@ -523,47 +460,28 @@
 
         function createCriterion(category, value) {
             let labelRo = value;
-
-            if (category === "era") {
-                labelRo = "Era " + value;
-            }
-
-            if (category === "champ") {
-                labelRo = value ? "Campion Mondial" : "Fără Titlu";
-            }
-
+            if (category === "era") labelRo = "Era " + value;
+            if (category === "champ") labelRo = value ? "Campion Mondial" : "Fără Titlu";
             return { category, value, labelRo };
         }
 
         function shuffle(values) {
             const result = [...values];
-
             for (let i = result.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [result[i], result[j]] = [result[j], result[i]];
             }
-
             return result;
         }
 
         function getCriterionPool() {
-            const teams = [...new Set(
-                driversDB.flatMap(driver => driver.teams)
-            )];
-
-            const nationalities = [...new Set(
-                driversDB.map(driver => driver.nationality)
-            )];
-
-            const eras = [...new Set(
-                driversDB.flatMap(driver => driver.eras)
-            )];
+            const teams = [...new Set(driversDB.flatMap(driver => driver.teams))];
+            const nationalities = [...new Set(driversDB.map(driver => driver.nationality))];
+            const eras = [...new Set(driversDB.flatMap(driver => driver.eras))];
 
             return [
                 ...teams.map(value => createCriterion("team", value)),
-                ...nationalities.map(value =>
-                    createCriterion("nationality", value)
-                ),
+                ...nationalities.map(value => createCriterion("nationality", value)),
                 ...eras.map(value => createCriterion("era", value)),
                 createCriterion("champ", true),
                 createCriterion("champ", false)
@@ -573,27 +491,16 @@
         function generateBoardCriteria() {
             const pool = getCriterionPool();
 
-            // Alegem trei rânduri, apoi coloane compatibile cu toate.
             for (let attempt = 0; attempt < 3000; attempt++) {
                 const rows = shuffle(pool).slice(0, 3);
-                const rowKeys = new Set(
-                    rows.map(item => JSON.stringify([
-                        item.category, item.value
-                    ]))
-                );
+                const rowKeys = new Set(rows.map(item => JSON.stringify([item.category, item.value])));
 
                 const compatibleColumns = pool.filter(column => {
-                    const key = JSON.stringify([
-                        column.category, column.value
-                    ]);
-
+                    const key = JSON.stringify([column.category, column.value]);
                     if (rowKeys.has(key)) return false;
 
                     return rows.every(row =>
-                        driversDB.some(driver =>
-                            driverMatches(driver, row) &&
-                            driverMatches(driver, column)
-                        )
+                        driversDB.some(driver => driverMatches(driver, row) && driverMatches(driver, column))
                     );
                 });
 
@@ -605,24 +512,16 @@
                 }
             }
 
-            throw new Error(
-                "Nu am putut genera o tablă validă. Încearcă din nou."
-            );
+            throw new Error("Nu am putut genera o tablă validă. Încearcă din nou.");
         }
 
         function emptyGrid() {
-            return [
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0]
-            ];
+            return [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
         }
 
         function normalizeGrid(value) {
             return Array.from({ length: 3 }, (_, r) =>
-                Array.from({ length: 3 }, (_, c) =>
-                    Number(value?.[r]?.[c] ?? 0)
-                )
+                Array.from({ length: 3 }, (_, c) => Number(value?.[r]?.[c] ?? 0))
             );
         }
 
@@ -632,13 +531,9 @@
 
         function generateRoomCode() {
             const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            const numbers = new Uint32Array(6);
+            const numbers = new Uint32Array(4);
             crypto.getRandomValues(numbers);
-
-            return Array.from(
-                numbers,
-                number => chars[number % chars.length]
-            ).join("");
+            return Array.from(numbers, n => chars[n % chars.length]).join("");
         }
 
         function setLobbyBusy(busy) {
@@ -650,9 +545,7 @@
         async function initialize() {
             try {
                 if (typeof firebase === "undefined") {
-                    throw new Error(
-                        "Firebase nu s-a încărcat. Verifică internetul și reîncarcă pagina."
-                    );
+                    throw new Error("Firebase nu s-a încărcat.");
                 }
 
                 firebase.initializeApp(firebaseConfig);
@@ -662,54 +555,23 @@
                     serverOffset = Number(snapshot.val()) || 0;
                 });
 
-                const response = await fetch("./drivers.json", {
-                    cache: "no-store"
-                });
-
+                const response = await fetch("./drivers.json", { cache: "no-store" });
                 if (!response.ok) {
-                    throw new Error(
-                        "Nu pot încărca drivers.json. Cod HTTP: " +
-                        response.status +
-                        ". Verifică dacă fișierul este lângă index.html."
-                    );
+                    throw new Error("Nu pot încărca drivers.json (HTTP " + response.status + ")");
                 }
 
                 const data = await response.json();
-
                 if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error(
-                        "drivers.json trebuie să conțină o listă de piloți."
-                    );
-                }
-
-                const invalidDriver = data.find(driver =>
-                    !driver ||
-                    typeof driver.name !== "string" ||
-                    typeof driver.nationality !== "string" ||
-                    typeof driver.championships !== "number" ||
-                    !Array.isArray(driver.teams) ||
-                    !Array.isArray(driver.eras)
-                );
-
-                if (invalidDriver) {
-                    throw new Error(
-                        "Există un pilot cu atribute lipsă în drivers.json."
-                    );
+                    throw new Error("drivers.json este gol.");
                 }
 
                 driversDB = data;
-
-                el("status-lobby").textContent =
-                    "Gata de joc! Piloți încărcați: " + driversDB.length;
-
+                el("status-lobby").textContent = "Gata de joc! Piloți încărcați: " + driversDB.length;
                 setLobbyBusy(false);
 
             } catch (error) {
                 console.error(error);
-
-                el("status-lobby").textContent =
-                    "Jocul nu a putut porni.";
-
+                el("status-lobby").textContent = "Jocul nu a putut porni.";
                 el("lobby-msg").textContent = error.message;
             }
         }
@@ -727,7 +589,6 @@
 
                 for (let attempt = 0; attempt < 10; attempt++) {
                     const code = generateRoomCode();
-
                     const gameData = {
                         ...criteria,
                         gridState: emptyGrid(),
@@ -742,11 +603,10 @@
                         createdAt: firebase.database.ServerValue.TIMESTAMP
                     };
 
-                    const result = await db.ref("rooms/" + code)
-                        .transaction(current => {
-                            if (current !== null) return;
-                            return gameData;
-                        });
+                    const result = await db.ref("rooms/" + code).transaction(current => {
+                        if (current !== null) return;
+                        return gameData;
+                    });
 
                     if (result.committed) {
                         createdCode = code;
@@ -754,11 +614,7 @@
                     }
                 }
 
-                if (!createdCode) {
-                    throw new Error(
-                        "Nu am putut rezerva un cod. Încearcă din nou."
-                    );
-                }
+                if (!createdCode) throw new Error("Nu am putut rezerva un cod.");
 
                 roomCode = createdCode;
                 myPlayer = 1;
@@ -768,18 +624,13 @@
                 el("lobby-divider").style.display = "none";
                 el("room-code-display").style.display = "block";
                 el("display-code-text").textContent = roomCode;
-
-                el("status-lobby").textContent =
-                    "Cameră creată. Trimite codul adversarului.";
+                el("status-lobby").textContent = "Cameră creată. Trimite codul adversarului.";
 
                 listenToRoom();
 
             } catch (error) {
                 console.error(error);
-
-                el("lobby-msg").textContent =
-                    "Nu am putut crea camera: " + error.message;
-
+                el("lobby-msg").textContent = "Eroare la crearea camerei: " + error.message;
                 el("status-lobby").textContent = "Încearcă din nou.";
                 setLobbyBusy(false);
             }
@@ -788,13 +639,9 @@
         async function joinRoom() {
             if (lobbyBusy || !driversDB.length || !db) return;
 
-            const code = el("room-code-input").value
-                .trim()
-                .toUpperCase();
-
+            const code = el("room-code-input").value.trim().toUpperCase();
             if (!/^[A-Z0-9]{4,6}$/.test(code)) {
-                el("lobby-msg").textContent =
-                    "Introdu un cod valid de 4–6 caractere.";
+                el("lobby-msg").textContent = "Introdu un cod valid!";
                 return;
             }
 
@@ -805,33 +652,19 @@
                 const ref = db.ref("rooms/" + code);
                 const snapshot = await ref.get();
 
-                if (!snapshot.exists()) {
-                    throw new Error("Camera nu există.");
-                }
-
-                if (snapshot.val().players >= 2) {
-                    throw new Error("Camera este plină.");
-                }
+                if (!snapshot.exists()) throw new Error("Camera nu există.");
+                if (snapshot.val().players >= 2) throw new Error("Camera este plină.");
 
                 const result = await ref.transaction(room => {
-                    if (!room || room.players !== 1 || room.gameOver) {
-                        return;
-                    }
-
+                    if (!room || room.players !== 1 || room.gameOver) return;
                     room.players = 2;
                     room.currentPlayer = 1;
                     room.turnId = Number(room.turnId || 0) + 1;
-                    room.turnStartedAt =
-                        firebase.database.ServerValue.TIMESTAMP;
-
+                    room.turnStartedAt = firebase.database.ServerValue.TIMESTAMP;
                     return room;
                 });
 
-                if (!result.committed) {
-                    throw new Error(
-                        "Camera nu mai este disponibilă."
-                    );
-                }
+                if (!result.committed) throw new Error("Camera nu mai este disponibilă.");
 
                 roomCode = code;
                 myPlayer = 2;
@@ -839,10 +672,7 @@
 
             } catch (error) {
                 console.error(error);
-
-                el("lobby-msg").textContent =
-                    "Conectare nereușită: " + error.message;
-
+                el("lobby-msg").textContent = "Conectare nereușită: " + error.message;
                 setLobbyBusy(false);
             }
         }
@@ -856,10 +686,7 @@
         }
 
         function listenToRoom() {
-            if (roomRef && roomCallback) {
-                roomRef.off("value", roomCallback);
-            }
-
+            if (roomRef && roomCallback) roomRef.off("value", roomCallback);
             roomRef = db.ref("rooms/" + roomCode);
 
             roomCallback = snapshot => {
@@ -874,29 +701,20 @@
                 state = snapshot.val();
                 state.gridState = normalizeGrid(state.gridState);
 
-                const turnKey =
-                    roomCode + ":" + state.turnId + ":" + state.currentPlayer;
-
+                const turnKey = roomCode + ":" + state.turnId + ":" + state.currentPlayer;
                 if (turnKey !== lastTurnKey) {
                     lastTurnKey = turnKey;
                     resetInput();
                     setMessage("");
                 }
 
-                if (
-                    selectedCell &&
-                    state.gridState[selectedCell.r][selectedCell.c] !== 0
-                ) {
+                if (selectedCell && state.gridState[selectedCell.r][selectedCell.c] !== 0) {
                     resetInput();
                 }
 
                 el("p1-score").textContent = state.p1Score || 0;
                 el("p2-score").textContent = state.p2Score || 0;
-
-                el("room-display-info").textContent =
-                    "Cod Cameră: " + roomCode +
-                    " | Ești: P" + myPlayer +
-                    (myPlayer === 1 ? " (Host)" : " (Guest)");
+                el("room-display-info").textContent = "Cod Cameră: " + roomCode + " | Ești: P" + myPlayer + (myPlayer === 1 ? " (Host)" : " (Guest)");
 
                 if (state.players === 2) {
                     el("lobby-screen").style.display = "none";
@@ -909,21 +727,13 @@
 
             roomRef.on("value", roomCallback, error => {
                 console.error(error);
-
-                el("lobby-msg").textContent =
-                    "Nu pot citi camera: " + error.message;
-
-                setMessage(
-                    "Eroare la citirea camerei: " + error.message,
-                    "#ff7777"
-                );
+                el("lobby-msg").textContent = "Nu pot citi camera: " + error.message;
             });
         }
 
         function renderBoard() {
             const board = el("board");
             board.replaceChildren();
-
             if (!state) return;
 
             const corner = document.createElement("div");
@@ -949,76 +759,45 @@
                     cell.className = "cell";
 
                     const owner = state.gridState[r][c];
-
                     if (owner === 1 || owner === 2) {
                         cell.classList.add("solved-p" + owner);
-
                         const answer = document.createElement("span");
-                        answer.textContent =
-                            state.answers?.[r + "_" + c] || "Rezolvat";
-
+                        answer.textContent = state.answers?.[r + "_" + c] || "Rezolvat";
                         const player = document.createElement("small");
                         player.textContent = "P" + owner;
-
                         cell.append(answer, player);
                         cell.disabled = true;
-
                     } else {
                         const rowText = document.createElement("span");
                         rowText.textContent = row.labelRo;
-
                         const plus = document.createElement("span");
                         plus.textContent = "+";
-
                         const columnText = document.createElement("span");
                         columnText.textContent = column.labelRo;
 
                         cell.append(rowText, plus, columnText);
+                        cell.disabled = state.players !== 2 || state.gameOver || state.currentPlayer !== myPlayer || submitting;
 
-                        cell.disabled =
-                            state.players !== 2 ||
-                            state.gameOver ||
-                            state.currentPlayer !== myPlayer ||
-                            submitting;
-
-                        if (
-                            selectedCell?.r === r &&
-                            selectedCell?.c === c
-                        ) {
+                        if (selectedCell?.r === r && selectedCell?.c === c) {
                             cell.classList.add("selected");
                         }
 
-                        cell.addEventListener("click", () => {
-                            selectCell(r, c);
-                        });
+                        cell.addEventListener("click", () => selectCell(r, c));
                     }
-
                     board.appendChild(cell);
                 });
             });
         }
 
         function selectCell(r, c) {
-            if (
-                !state ||
-                state.players !== 2 ||
-                state.gameOver ||
-                state.currentPlayer !== myPlayer ||
-                state.gridState[r][c] !== 0 ||
-                submitting
-            ) {
-                return;
-            }
+            if (!state || state.players !== 2 || state.gameOver || state.currentPlayer !== myPlayer || state.gridState[r][c] !== 0 || submitting) return;
 
             selectedCell = { r, c };
-
             setMessage("");
             renderBoard();
             updateControls();
 
-            el("driver-input").placeholder =
-                "Nume complet sau nume de familie...";
-
+            el("driver-input").placeholder = "Nume sau nume de familie...";
             el("driver-input").focus();
         }
 
@@ -1029,15 +808,8 @@
             const myTurn = playing && state.currentPlayer === myPlayer;
             const canSubmit = myTurn && selectedCell && !submitting;
 
-            el("p1-badge").classList.toggle(
-                "active-turn",
-                playing && state.currentPlayer === 1
-            );
-
-            el("p2-badge").classList.toggle(
-                "active-turn",
-                playing && state.currentPlayer === 2
-            );
+            el("p1-badge").classList.toggle("active-turn", playing && state.currentPlayer === 1);
+            el("p2-badge").classList.toggle("active-turn", playing && state.currentPlayer === 2);
 
             el("driver-input").disabled = !canSubmit;
             el("submit-btn").disabled = !canSubmit;
@@ -1045,37 +817,19 @@
             if (state.gameOver) {
                 const p1 = Number(state.p1Score || 0);
                 const p2 = Number(state.p2Score || 0);
-
-                if (p1 === p2) {
-                    el("instructions").textContent =
-                        "Joc încheiat: egalitate!";
-                } else {
-                    const winner = p1 > p2 ? 1 : 2;
-
-                    el("instructions").textContent =
-                        "Joc încheiat! A câștigat P" + winner +
-                        ", cu scorul " + p1 + "–" + p2 + ".";
-                }
-
+                if (p1 === p2) el("instructions").textContent = "Joc încheiat: egalitate!";
+                else el("instructions").textContent = "Joc încheiat! A câștigat P" + (p1 > p2 ? 1 : 2) + " (" + p1 + "–" + p2 + ").";
             } else if (state.players !== 2) {
-                el("instructions").textContent =
-                    "Așteptăm al doilea jucător...";
-
+                el("instructions").textContent = "Așteptăm al doilea jucător...";
             } else if (myTurn) {
-                el("instructions").textContent =
-                    selectedCell
-                        ? "Este rândul tău! Scrie pilotul."
-                        : "Este rândul tău! Alege o căsuță.";
-
+                el("instructions").textContent = selectedCell ? "Este rândul tău! Scrie pilotul." : "Este rândul tău! Alege o căsuță.";
             } else {
-                el("instructions").textContent =
-                    "Rândul adversarului... Așteaptă mutarea.";
+                el("instructions").textContent = "Rândul adversarului... Așteaptă mutarea.";
             }
         }
 
         function startTimer() {
             clearInterval(timerInterval);
-
             const bar = el("timer-bar");
 
             if (!state || state.gameOver || state.players !== 2) {
@@ -1085,26 +839,13 @@
 
             function tick() {
                 if (!state || state.gameOver) return;
+                const elapsed = serverNow() - Number(state.turnStartedAt || 0);
+                const remaining = Math.max(0, Math.min(TURN_DURATION, TURN_DURATION - elapsed));
 
-                const elapsed =
-                    serverNow() - Number(state.turnStartedAt || 0);
+                bar.style.width = (remaining / TURN_DURATION * 100) + "%";
+                bar.style.backgroundColor = remaining <= 10000 ? "#e10600" : "#00d2be";
 
-                const remaining = Math.max(
-                    0,
-                    Math.min(TURN_DURATION, TURN_DURATION - elapsed)
-                );
-
-                bar.style.width =
-                    (remaining / TURN_DURATION * 100) + "%";
-
-                bar.style.backgroundColor =
-                    remaining <= 10000 ? "#e10600" : "#00d2be";
-
-                if (
-                    remaining <= 0 &&
-                    !timeoutPending &&
-                    !submitting
-                ) {
+                if (remaining <= 0 && !timeoutPending && !submitting) {
                     advanceExpiredTurn();
                 }
             }
@@ -1115,43 +856,22 @@
 
         async function advanceExpiredTurn() {
             if (!state || !roomRef || timeoutPending) return;
-
             timeoutPending = true;
             const expectedTurnId = state.turnId;
 
             try {
                 await roomRef.transaction(room => {
-                    if (
-                        !room ||
-                        room.gameOver ||
-                        room.players !== 2 ||
-                        room.turnId !== expectedTurnId
-                    ) {
-                        return;
-                    }
-
-                    const elapsed =
-                        serverNow() - Number(room.turnStartedAt || 0);
-
+                    if (!room || room.gameOver || room.players !== 2 || room.turnId !== expectedTurnId) return;
+                    const elapsed = serverNow() - Number(room.turnStartedAt || 0);
                     if (elapsed < TURN_DURATION) return;
 
-                    room.currentPlayer =
-                        room.currentPlayer === 1 ? 2 : 1;
-
+                    room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
                     room.turnId = Number(room.turnId || 0) + 1;
-                    room.turnStartedAt =
-                        firebase.database.ServerValue.TIMESTAMP;
-
+                    room.turnStartedAt = firebase.database.ServerValue.TIMESTAMP;
                     return room;
                 });
-
             } catch (error) {
                 console.error(error);
-                setMessage(
-                    "Nu pot schimba tura: " + error.message,
-                    "#ff7777"
-                );
-
             } finally {
                 timeoutPending = false;
             }
@@ -1160,16 +880,7 @@
         async function checkDriver(event) {
             event.preventDefault();
 
-            if (
-                !state ||
-                !selectedCell ||
-                state.gameOver ||
-                state.players !== 2 ||
-                state.currentPlayer !== myPlayer ||
-                submitting
-            ) {
-                return;
-            }
+            if (!state || !selectedCell || state.gameOver || state.players !== 2 || state.currentPlayer !== myPlayer || submitting) return;
 
             const inputValue = el("driver-input").value.trim();
             if (!inputValue) return;
@@ -1177,12 +888,7 @@
             const candidates = findDrivers(inputValue);
 
             if (candidates.length > 1) {
-                setMessage(
-                    "Scrie numele complet: " +
-                    candidates.map(driver => driver.name).join(" / "),
-                    "#ffcc00"
-                );
-
+                setMessage("Specifică mai clar: " + candidates.map(d => d.name).join(" / "), "#ffcc00");
                 return;
             }
 
@@ -1196,95 +902,53 @@
 
             try {
                 const result = await roomRef.transaction(room => {
-                    if (
-                        !room ||
-                        room.gameOver ||
-                        room.players !== 2 ||
-                        room.currentPlayer !== myPlayer ||
-                        room.turnId !== expectedTurnId
-                    ) {
-                        return;
-                    }
-
-                    const elapsed =
-                        serverNow() - Number(room.turnStartedAt || 0);
-
+                    if (!room || room.gameOver || room.players !== 2 || room.currentPlayer !== myPlayer || room.turnId !== expectedTurnId) return;
+                    const elapsed = serverNow() - Number(room.turnStartedAt || 0);
                     if (elapsed >= TURN_DURATION) return;
 
                     const grid = normalizeGrid(room.gridState);
-
                     if (grid[r][c] !== 0) return;
 
-                    const valid =
-                        driver &&
-                        driverMatches(driver, room.rowCriteria[r]) &&
-                        driverMatches(driver, room.colCriteria[c]);
+                    const valid = driver && driverMatches(driver, room.rowCriteria[r]) && driverMatches(driver, room.colCriteria[c]);
 
                     if (valid) {
                         grid[r][c] = myPlayer;
                         room.gridState = grid;
-
                         room.answers = room.answers || {};
                         room.answers[r + "_" + c] = driver.name;
 
                         const flattened = grid.flat();
-
-                        room.p1Score =
-                            flattened.filter(owner => owner === 1).length;
-
-                        room.p2Score =
-                            flattened.filter(owner => owner === 2).length;
-
-                        room.gameOver =
-                            flattened.every(owner => owner !== 0);
+                        room.p1Score = flattened.filter(owner => owner === 1).length;
+                        room.p2Score = flattened.filter(owner => owner === 2).length;
+                        room.gameOver = flattened.every(owner => owner !== 0);
                     }
 
                     room.currentPlayer = myPlayer === 1 ? 2 : 1;
                     room.turnId = Number(room.turnId || 0) + 1;
-                    room.turnStartedAt =
-                        firebase.database.ServerValue.TIMESTAMP;
+                    room.turnStartedAt = firebase.database.ServerValue.TIMESTAMP;
 
                     return room;
                 });
 
                 if (!result.committed) {
-                    setMessage(
-                        "Mutarea nu a fost salvată: timpul a expirat sau tura s-a schimbat.",
-                        "#ffcc00"
-                    );
-
+                    setMessage("Timpul a expirat sau tura s-a schimbat.", "#ffcc00");
                 } else {
                     const saved = result.snapshot.val();
                     const savedGrid = normalizeGrid(saved.gridState);
 
                     if (savedGrid[r][c] === myPlayer) {
                         setMessage("Corect! " + driver.name);
-
                     } else if (!driver) {
-                        setMessage(
-                            "Pilot negăsit în drivers.json. Tura se schimbă.",
-                            "#ff7777"
-                        );
-
+                        setMessage("Pilot negăsit în baza de date. Tura se schimbă.", "#ff7777");
                     } else {
-                        setMessage(
-                            driver.name +
-                            " nu îndeplinește ambele condiții. Tura se schimbă.",
-                            "#ff7777"
-                        );
+                        setMessage(driver.name + " nu îndeplinește ambele condiții. Tura se schimbă.", "#ff7777");
                     }
-
                     resetInput();
                 }
 
             } catch (error) {
                 console.error(error);
-
-                setMessage(
-                    "Eroare la salvarea mutării: " + error.message,
-                    "#ff7777"
-                );
-
+                setMessage("Eroare la salvare: " + error.message, "#ff7777");
             } finally {
                 submitting = false;
                 updateControls();
@@ -1295,7 +959,6 @@
         el("create-btn").addEventListener("click", createRoom);
         el("join-btn").addEventListener("click", joinRoom);
         el("answer-form").addEventListener("submit", checkDriver);
-
         el("room-code-input").addEventListener("keydown", event => {
             if (event.key === "Enter") {
                 event.preventDefault();
