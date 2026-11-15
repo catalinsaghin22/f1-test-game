@@ -123,7 +123,7 @@
         "use strict";
 
         const firebaseConfig = {
-            databaseURL: "https://f1-test-game-default-rtdb.europe-west1.firebasedatabase.app/"
+            databaseURL: "https://f1-grid-default-rtdb.europe-west1.firebasedatabase.app/"
         };
 
         const TURN_DURATION = 30000;   // 30 s per tură
@@ -146,6 +146,7 @@
         let submitting = false;
         let lobbyBusy = true;
         let lastTurnKey = null;
+        let connected = false;
 
         const el = id => document.getElementById(id);
 
@@ -176,6 +177,7 @@
                 case "team":        return driver.teams.includes(criterion.value);
                 case "nationality": return driver.nationality === criterion.value;
                 case "debut":       return Math.floor(driver.debut / 10) * 10 === criterion.value;
+                case "raced":       return (driver.years || []).some(([a, b]) => a <= criterion.value + 9 && b >= criterion.value);
                 case "champion":    return driver.titles > 0;
                 default:            return false;
             }
@@ -184,8 +186,13 @@
         function createCriterion(category, value) {
             let labelRo = String(value);
             if (category === "debut") labelRo = "Debut în anii " + value;
+            if (category === "raced") labelRo = "A concurat în anii " + value;
             if (category === "champion") labelRo = "Campion Mondial";
             return { category, value, labelRo };
+        }
+
+        function isTimeCriterion(c) {
+            return c.category === "debut" || c.category === "raced";
         }
 
         function sameCriterion(a, b) {
@@ -210,10 +217,17 @@
             const nationalities = [...new Set(driversDB.map(d => d.nationality))];
             const decades = [...new Set(driversDB.map(d => Math.floor(d.debut / 10) * 10))];
 
+            const raced = [...new Set(driversDB.flatMap(d => (d.years || []).flatMap(([a, b]) => {
+                const out = [];
+                for (let y = Math.floor(a / 10) * 10; y <= b; y += 10) out.push(y);
+                return out;
+            })))];
+
             const all = [
                 ...teams.map(v => createCriterion("team", v)),
                 ...nationalities.map(v => createCriterion("nationality", v)),
                 ...decades.map(v => createCriterion("debut", v)),
+                ...raced.map(v => createCriterion("raced", v)),
                 createCriterion("champion", true)
             ];
             // păstrăm doar criteriile cu suficienți piloți, altfel celulele devin imposibile
@@ -226,11 +240,20 @@
             for (const minSolutions of [4, 3, 2]) {
                 for (let attempt = 0; attempt < 2000; attempt++) {
                     const rows = shuffle(pool).slice(0, 3);
-                    const columns = shuffle(pool.filter(col =>
+                    // maxim un criteriu de tip "ani" (debut / a concurat) pe rânduri și unul pe coloane
+                    if (rows.filter(isTimeCriterion).length > 1) continue;
+
+                    const candidates = shuffle(pool.filter(col =>
                         rows.every(row => !sameCriterion(row, col) && countSolutions(row, col) >= minSolutions)
                     ));
-                    if (columns.length >= 3) {
-                        return { rowCriteria: rows, colCriteria: columns.slice(0, 3) };
+                    const columns = [];
+                    for (const col of candidates) {
+                        if (isTimeCriterion(col) && columns.some(isTimeCriterion)) continue;
+                        columns.push(col);
+                        if (columns.length === 3) break;
+                    }
+                    if (columns.length === 3) {
+                        return { rowCriteria: rows, colCriteria: columns };
                     }
                 }
             }
@@ -255,6 +278,13 @@
             return Array.from(numbers, n => chars[n % chars.length]).join("");
         }
 
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout: Firebase nu răspunde. Verifică databaseURL și regulile bazei de date.")), ms))
+            ]);
+        }
+
         function setLobbyBusy(busy) {
             lobbyBusy = busy;
             el("create-btn").disabled = busy;
@@ -272,6 +302,19 @@
                 db.ref(".info/serverTimeOffset").on("value", snap => {
                     serverOffset = Number(snap.val()) || 0;
                 });
+                db.ref(".info/connected").on("value", snap => {
+                    connected = snap.val() === true;
+                    if (connected && el("lobby-msg").dataset.conn) {
+                        el("lobby-msg").textContent = "";
+                        delete el("lobby-msg").dataset.conn;
+                    }
+                });
+                setTimeout(() => {
+                    if (!connected) {
+                        el("lobby-msg").dataset.conn = "1";
+                        el("lobby-msg").textContent = "Nu mă pot conecta la Firebase. Verifică databaseURL din index.html (trebuie să fie exact URL-ul din Realtime Database → Data).";
+                    }
+                }, 6000);
 
                 const response = await fetch("./drivers.json", { cache: "no-store" });
                 if (!response.ok) throw new Error("Nu pot încărca drivers.json (rulează prin server, nu din file://).");
@@ -293,6 +336,10 @@
 
         async function createRoom() {
             if (lobbyBusy || !driversDB.length || !db) return;
+            if (!connected) {
+                el("lobby-msg").textContent = "Nu sunt conectat la Firebase. Verifică databaseURL din index.html.";
+                return;
+            }
             setLobbyBusy(true);
             el("lobby-msg").textContent = "";
             el("status-lobby").textContent = "Se creează camera...";
@@ -317,7 +364,7 @@
                 for (let i = 0; i < 5 && !created; i++) {
                     const code = generateRoomCode();
                     // creăm doar dacă încă nu există (evită suprascrierea unei camere existente)
-                    const res = await db.ref("rooms/" + code).transaction(current => current === null ? gameData : undefined);
+                    const res = await withTimeout(db.ref("rooms/" + code).transaction(current => current === null ? gameData : undefined), 10000);
                     if (res.committed) created = code;
                 }
                 if (!created) throw new Error("Nu am găsit un cod liber. Încearcă din nou.");
@@ -349,6 +396,10 @@
                 return;
             }
 
+            if (!connected) {
+                el("lobby-msg").textContent = "Nu sunt conectat la Firebase. Verifică databaseURL din index.html.";
+                return;
+            }
             setLobbyBusy(true);
             el("lobby-msg").textContent = "";
 
