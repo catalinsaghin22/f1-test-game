@@ -1,0 +1,2501 @@
+[
+  {
+    "id": "alesi",
+    "name": "Jean Alesi",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 1989,
+    "teams": [
+      "Tyrrell",
+      "Ferrari",
+      "Benetton",
+      "Sauber",
+      "Prost",
+      "Jordan"
+    ],
+    "years": [
+      [
+        1989,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "herbert",
+    "name": "Johnny Herbert",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 1989,
+    "teams": [
+      "Benetton",
+      "Tyrrell",
+      "Lotus",
+      "Ligier",
+      "Sauber",
+      "Stewart",
+      "Jaguar"
+    ],
+    "years": [
+      [
+        1989,
+        2000
+      ]
+    ]
+  },
+  {
+    "id": "michael-schumacher",
+    "name": "Michael Schumacher",
+    "nationality": "German",
+    "titles": 7,
+    "debut": 1991,
+    "teams": [
+      "Jordan",
+      "Benetton",
+      "Ferrari",
+      "Mercedes"
+    ],
+    "years": [
+      [
+        1991,
+        2006
+      ],
+      [
+        2010,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "hakkinen",
+    "name": "Mika Häkkinen",
+    "nationality": "Finlandez",
+    "titles": 2,
+    "debut": 1991,
+    "teams": [
+      "Lotus",
+      "McLaren"
+    ],
+    "years": [
+      [
+        1991,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "irvine",
+    "name": "Eddie Irvine",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 1993,
+    "teams": [
+      "Jordan",
+      "Ferrari",
+      "Jaguar"
+    ],
+    "years": [
+      [
+        1993,
+        2002
+      ]
+    ]
+  },
+  {
+    "id": "badoer",
+    "name": "Luca Badoer",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 1993,
+    "teams": [
+      "Lola",
+      "Minardi",
+      "Forti",
+      "Ferrari"
+    ],
+    "years": [
+      [
+        1993,
+        1993
+      ],
+      [
+        1995,
+        1996
+      ],
+      [
+        1999,
+        1999
+      ],
+      [
+        2009,
+        2009
+      ]
+    ]
+  },
+  {
+    "id": "barrichello",
+    "name": "Rubens Barrichello",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 1993,
+    "teams": [
+      "Jordan",
+      "Stewart",
+      "Ferrari",
+      "Honda",
+      "Brawn",
+      "Williams"
+    ],
+    "years": [
+      [
+        1993,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "coulthard",
+    "name": "David Coulthard",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 1994,
+    "teams": [
+      "Williams",
+      "McLaren",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        1994,
+        2008
+      ]
+    ]
+  },
+  {
+    "id": "frentzen",
+    "name": "Heinz-Harald Frentzen",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 1994,
+    "teams": [
+      "Sauber",
+      "Williams",
+      "Jordan",
+      "Prost",
+      "Arrows"
+    ],
+    "years": [
+      [
+        1994,
+        2003
+      ]
+    ]
+  },
+  {
+    "id": "jos-verstappen",
+    "name": "Jos Verstappen",
+    "nationality": "Olandez",
+    "titles": 0,
+    "debut": 1994,
+    "teams": [
+      "Benetton",
+      "Simtek",
+      "Footwork",
+      "Tyrrell",
+      "Stewart",
+      "Arrows",
+      "Minardi"
+    ],
+    "years": [
+      [
+        1994,
+        1998
+      ],
+      [
+        2000,
+        2001
+      ],
+      [
+        2003,
+        2003
+      ]
+    ]
+  },
+  {
+    "id": "salo",
+    "name": "Mika Salo",
+    "nationality": "Finlandez",
+    "titles": 0,
+    "debut": 1994,
+    "teams": [
+      "Lotus",
+      "Tyrrell",
+      "Arrows",
+      "BAR",
+      "Ferrari",
+      "Sauber",
+      "Toyota"
+    ],
+    "years": [
+      [
+        1994,
+        2000
+      ],
+      [
+        2002,
+        2002
+      ]
+    ]
+  },
+  {
+    "id": "panis",
+    "name": "Olivier Panis",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 1994,
+    "teams": [
+      "Ligier",
+      "Prost",
+      "BAR",
+      "Toyota"
+    ],
+    "years": [
+      [
+        1994,
+        1999
+      ],
+      [
+        2001,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "diniz",
+    "name": "Pedro Diniz",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 1995,
+    "teams": [
+      "Forti",
+      "Ligier",
+      "Arrows",
+      "Sauber"
+    ],
+    "years": [
+      [
+        1995,
+        2000
+      ]
+    ]
+  },
+  {
+    "id": "fisichella",
+    "name": "Giancarlo Fisichella",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 1996,
+    "teams": [
+      "Minardi",
+      "Jordan",
+      "Benetton",
+      "Sauber",
+      "Renault",
+      "Force India",
+      "Ferrari"
+    ],
+    "years": [
+      [
+        1996,
+        2009
+      ]
+    ]
+  },
+  {
+    "id": "villeneuve",
+    "name": "Jacques Villeneuve",
+    "nationality": "Canadian",
+    "titles": 1,
+    "debut": 1996,
+    "teams": [
+      "Williams",
+      "BAR",
+      "Renault",
+      "Sauber",
+      "BMW Sauber"
+    ],
+    "years": [
+      [
+        1996,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "marques",
+    "name": "Tarso Marques",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 1996,
+    "teams": [
+      "Minardi"
+    ],
+    "years": [
+      [
+        1996,
+        1997
+      ],
+      [
+        2001,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "wurz",
+    "name": "Alexander Wurz",
+    "nationality": "Austriac",
+    "titles": 0,
+    "debut": 1997,
+    "teams": [
+      "Benetton",
+      "McLaren",
+      "Williams"
+    ],
+    "years": [
+      [
+        1997,
+        2000
+      ],
+      [
+        2005,
+        2005
+      ],
+      [
+        2007,
+        2007
+      ]
+    ]
+  },
+  {
+    "id": "trulli",
+    "name": "Jarno Trulli",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 1997,
+    "teams": [
+      "Minardi",
+      "Prost",
+      "Jordan",
+      "Renault",
+      "Toyota",
+      "Lotus Racing"
+    ],
+    "years": [
+      [
+        1997,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "ralf-schumacher",
+    "name": "Ralf Schumacher",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 1997,
+    "teams": [
+      "Jordan",
+      "Williams",
+      "Toyota"
+    ],
+    "years": [
+      [
+        1997,
+        2007
+      ]
+    ]
+  },
+  {
+    "id": "gene",
+    "name": "Marc Gené",
+    "nationality": "Spaniol",
+    "titles": 0,
+    "debut": 1999,
+    "teams": [
+      "Minardi",
+      "Williams"
+    ],
+    "years": [
+      [
+        1999,
+        2000
+      ],
+      [
+        2003,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "de-la-rosa",
+    "name": "Pedro de la Rosa",
+    "nationality": "Spaniol",
+    "titles": 0,
+    "debut": 1999,
+    "teams": [
+      "Arrows",
+      "Jaguar",
+      "McLaren",
+      "Sauber",
+      "HRT"
+    ],
+    "years": [
+      [
+        1999,
+        2002
+      ],
+      [
+        2005,
+        2006
+      ],
+      [
+        2010,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "zonta",
+    "name": "Ricardo Zonta",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 1999,
+    "teams": [
+      "BAR",
+      "Jordan",
+      "Toyota"
+    ],
+    "years": [
+      [
+        1999,
+        2001
+      ],
+      [
+        2004,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "mazzacane",
+    "name": "Gastón Mazzacane",
+    "nationality": "Argentinian",
+    "titles": 0,
+    "debut": 2000,
+    "teams": [
+      "Minardi",
+      "Prost"
+    ],
+    "years": [
+      [
+        2000,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "button",
+    "name": "Jenson Button",
+    "nationality": "Britanic",
+    "titles": 1,
+    "debut": 2000,
+    "teams": [
+      "Williams",
+      "Benetton",
+      "Renault",
+      "BAR",
+      "Honda",
+      "Brawn",
+      "McLaren"
+    ],
+    "years": [
+      [
+        2000,
+        2017
+      ]
+    ]
+  },
+  {
+    "id": "burti",
+    "name": "Luciano Burti",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2000,
+    "teams": [
+      "Jaguar",
+      "Prost"
+    ],
+    "years": [
+      [
+        2000,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "heidfeld",
+    "name": "Nick Heidfeld",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2000,
+    "teams": [
+      "Prost",
+      "Sauber",
+      "Jordan",
+      "Williams",
+      "BMW Sauber",
+      "Renault"
+    ],
+    "years": [
+      [
+        2000,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "yoong",
+    "name": "Alex Yoong",
+    "nationality": "Malaiezian",
+    "titles": 0,
+    "debut": 2001,
+    "teams": [
+      "Minardi"
+    ],
+    "years": [
+      [
+        2001,
+        2002
+      ]
+    ]
+  },
+  {
+    "id": "bernoldi",
+    "name": "Enrique Bernoldi",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2001,
+    "teams": [
+      "Arrows"
+    ],
+    "years": [
+      [
+        2001,
+        2002
+      ]
+    ]
+  },
+  {
+    "id": "alonso",
+    "name": "Fernando Alonso",
+    "nationality": "Spaniol",
+    "titles": 2,
+    "debut": 2001,
+    "teams": [
+      "Minardi",
+      "Renault",
+      "McLaren",
+      "Ferrari",
+      "Alpine",
+      "Aston Martin"
+    ],
+    "years": [
+      [
+        2001,
+        2001
+      ],
+      [
+        2003,
+        2018
+      ],
+      [
+        2021,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "montoya",
+    "name": "Juan Pablo Montoya",
+    "nationality": "Columbian",
+    "titles": 0,
+    "debut": 2001,
+    "teams": [
+      "Williams",
+      "McLaren"
+    ],
+    "years": [
+      [
+        2001,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "raikkonen",
+    "name": "Kimi Räikkönen",
+    "nationality": "Finlandez",
+    "titles": 1,
+    "debut": 2001,
+    "teams": [
+      "Sauber",
+      "McLaren",
+      "Ferrari",
+      "Lotus F1",
+      "Alfa Romeo"
+    ],
+    "years": [
+      [
+        2001,
+        2009
+      ],
+      [
+        2012,
+        2021
+      ]
+    ]
+  },
+  {
+    "id": "enge",
+    "name": "Tomáš Enge",
+    "nationality": "Ceh",
+    "titles": 0,
+    "debut": 2001,
+    "teams": [
+      "Prost"
+    ],
+    "years": [
+      [
+        2001,
+        2001
+      ]
+    ]
+  },
+  {
+    "id": "mcnish",
+    "name": "Allan McNish",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2002,
+    "teams": [
+      "Toyota"
+    ],
+    "years": [
+      [
+        2002,
+        2002
+      ]
+    ]
+  },
+  {
+    "id": "davidson",
+    "name": "Anthony Davidson",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2002,
+    "teams": [
+      "Minardi",
+      "BAR",
+      "Super Aguri"
+    ],
+    "years": [
+      [
+        2002,
+        2002
+      ],
+      [
+        2005,
+        2005
+      ],
+      [
+        2007,
+        2008
+      ]
+    ]
+  },
+  {
+    "id": "massa",
+    "name": "Felipe Massa",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2002,
+    "teams": [
+      "Sauber",
+      "Ferrari",
+      "Williams"
+    ],
+    "years": [
+      [
+        2002,
+        2002
+      ],
+      [
+        2004,
+        2017
+      ]
+    ]
+  },
+  {
+    "id": "webber",
+    "name": "Mark Webber",
+    "nationality": "Australian",
+    "titles": 0,
+    "debut": 2002,
+    "teams": [
+      "Minardi",
+      "Jaguar",
+      "Williams",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        2002,
+        2013
+      ]
+    ]
+  },
+  {
+    "id": "sato",
+    "name": "Takuma Sato",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2002,
+    "teams": [
+      "Jordan",
+      "BAR",
+      "Super Aguri"
+    ],
+    "years": [
+      [
+        2002,
+        2008
+      ]
+    ]
+  },
+  {
+    "id": "pizzonia",
+    "name": "Antônio Pizzonia",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Jaguar",
+      "Williams"
+    ],
+    "years": [
+      [
+        2003,
+        2005
+      ]
+    ]
+  },
+  {
+    "id": "da-matta",
+    "name": "Cristiano da Matta",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Toyota"
+    ],
+    "years": [
+      [
+        2003,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "wilson",
+    "name": "Justin Wilson",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Minardi",
+      "Jaguar"
+    ],
+    "years": [
+      [
+        2003,
+        2003
+      ]
+    ]
+  },
+  {
+    "id": "kiesa",
+    "name": "Nicolas Kiesa",
+    "nationality": "Danez",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Minardi"
+    ],
+    "years": [
+      [
+        2003,
+        2003
+      ]
+    ]
+  },
+  {
+    "id": "firman",
+    "name": "Ralph Firman",
+    "nationality": "Irlandez",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Jordan"
+    ],
+    "years": [
+      [
+        2003,
+        2003
+      ]
+    ]
+  },
+  {
+    "id": "baumgartner",
+    "name": "Zsolt Baumgartner",
+    "nationality": "Maghiar",
+    "titles": 0,
+    "debut": 2003,
+    "teams": [
+      "Jordan",
+      "Minardi"
+    ],
+    "years": [
+      [
+        2003,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "klien",
+    "name": "Christian Klien",
+    "nationality": "Austriac",
+    "titles": 0,
+    "debut": 2004,
+    "teams": [
+      "Jaguar",
+      "Red Bull",
+      "HRT"
+    ],
+    "years": [
+      [
+        2004,
+        2006
+      ],
+      [
+        2010,
+        2010
+      ]
+    ]
+  },
+  {
+    "id": "bruni",
+    "name": "Gianmaria Bruni",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 2004,
+    "teams": [
+      "Minardi"
+    ],
+    "years": [
+      [
+        2004,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "pantano",
+    "name": "Giorgio Pantano",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 2004,
+    "teams": [
+      "Jordan"
+    ],
+    "years": [
+      [
+        2004,
+        2004
+      ]
+    ]
+  },
+  {
+    "id": "glock",
+    "name": "Timo Glock",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2004,
+    "teams": [
+      "Jordan",
+      "Toyota",
+      "Virgin",
+      "Marussia"
+    ],
+    "years": [
+      [
+        2004,
+        2004
+      ],
+      [
+        2008,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "albers",
+    "name": "Christijan Albers",
+    "nationality": "Olandez",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Minardi",
+      "Midland",
+      "Spyker"
+    ],
+    "years": [
+      [
+        2005,
+        2007
+      ]
+    ]
+  },
+  {
+    "id": "karthikeyan",
+    "name": "Narain Karthikeyan",
+    "nationality": "Indian",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Jordan",
+      "HRT"
+    ],
+    "years": [
+      [
+        2005,
+        2005
+      ],
+      [
+        2011,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "friesacher",
+    "name": "Patrick Friesacher",
+    "nationality": "Austriac",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Minardi"
+    ],
+    "years": [
+      [
+        2005,
+        2005
+      ]
+    ]
+  },
+  {
+    "id": "doornbos",
+    "name": "Robert Doornbos",
+    "nationality": "Olandez",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Minardi",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        2005,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "monteiro",
+    "name": "Tiago Monteiro",
+    "nationality": "Portughez",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Jordan",
+      "Midland"
+    ],
+    "years": [
+      [
+        2005,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "liuzzi",
+    "name": "Vitantonio Liuzzi",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 2005,
+    "teams": [
+      "Red Bull",
+      "Toro Rosso",
+      "Force India",
+      "HRT"
+    ],
+    "years": [
+      [
+        2005,
+        2007
+      ],
+      [
+        2009,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "montagny",
+    "name": "Franck Montagny",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2006,
+    "teams": [
+      "Super Aguri"
+    ],
+    "years": [
+      [
+        2006,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "rosberg",
+    "name": "Nico Rosberg",
+    "nationality": "German",
+    "titles": 1,
+    "debut": 2006,
+    "teams": [
+      "Williams",
+      "Mercedes"
+    ],
+    "years": [
+      [
+        2006,
+        2016
+      ]
+    ]
+  },
+  {
+    "id": "kubica",
+    "name": "Robert Kubica",
+    "nationality": "Polonez",
+    "titles": 0,
+    "debut": 2006,
+    "teams": [
+      "BMW Sauber",
+      "Renault",
+      "Williams",
+      "Alfa Romeo"
+    ],
+    "years": [
+      [
+        2006,
+        2010
+      ],
+      [
+        2019,
+        2019
+      ],
+      [
+        2021,
+        2021
+      ]
+    ]
+  },
+  {
+    "id": "yamamoto",
+    "name": "Sakon Yamamoto",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2006,
+    "teams": [
+      "Super Aguri",
+      "Spyker",
+      "HRT"
+    ],
+    "years": [
+      [
+        2006,
+        2007
+      ],
+      [
+        2010,
+        2010
+      ]
+    ]
+  },
+  {
+    "id": "speed",
+    "name": "Scott Speed",
+    "nationality": "American",
+    "titles": 0,
+    "debut": 2006,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2006,
+        2007
+      ]
+    ]
+  },
+  {
+    "id": "ide",
+    "name": "Yuji Ide",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2006,
+    "teams": [
+      "Super Aguri"
+    ],
+    "years": [
+      [
+        2006,
+        2006
+      ]
+    ]
+  },
+  {
+    "id": "sutil",
+    "name": "Adrian Sutil",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2007,
+    "teams": [
+      "Spyker",
+      "Force India",
+      "Sauber"
+    ],
+    "years": [
+      [
+        2007,
+        2011
+      ],
+      [
+        2013,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "kovalainen",
+    "name": "Heikki Kovalainen",
+    "nationality": "Finlandez",
+    "titles": 0,
+    "debut": 2007,
+    "teams": [
+      "Renault",
+      "McLaren",
+      "Lotus Racing",
+      "Caterham",
+      "Lotus F1"
+    ],
+    "years": [
+      [
+        2007,
+        2013
+      ]
+    ]
+  },
+  {
+    "id": "nakajima",
+    "name": "Kazuki Nakajima",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2007,
+    "teams": [
+      "Williams"
+    ],
+    "years": [
+      [
+        2007,
+        2009
+      ]
+    ]
+  },
+  {
+    "id": "hamilton",
+    "name": "Lewis Hamilton",
+    "nationality": "Britanic",
+    "titles": 7,
+    "debut": 2007,
+    "teams": [
+      "McLaren",
+      "Mercedes",
+      "Ferrari"
+    ],
+    "years": [
+      [
+        2007,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "winkelhock",
+    "name": "Markus Winkelhock",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2007,
+    "teams": [
+      "Spyker"
+    ],
+    "years": [
+      [
+        2007,
+        2007
+      ]
+    ]
+  },
+  {
+    "id": "vettel",
+    "name": "Sebastian Vettel",
+    "nationality": "German",
+    "titles": 4,
+    "debut": 2007,
+    "teams": [
+      "BMW Sauber",
+      "Toro Rosso",
+      "Red Bull",
+      "Ferrari",
+      "Aston Martin"
+    ],
+    "years": [
+      [
+        2007,
+        2022
+      ]
+    ]
+  },
+  {
+    "id": "piquet-jr",
+    "name": "Nelson Piquet Jr.",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2008,
+    "teams": [
+      "Renault"
+    ],
+    "years": [
+      [
+        2008,
+        2009
+      ]
+    ]
+  },
+  {
+    "id": "bourdais",
+    "name": "Sébastien Bourdais",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2008,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2008,
+        2009
+      ]
+    ]
+  },
+  {
+    "id": "alguersuari",
+    "name": "Jaime Alguersuari",
+    "nationality": "Spaniol",
+    "titles": 0,
+    "debut": 2009,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2009,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "kobayashi",
+    "name": "Kamui Kobayashi",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2009,
+    "teams": [
+      "Toyota",
+      "Sauber",
+      "Caterham"
+    ],
+    "years": [
+      [
+        2009,
+        2012
+      ],
+      [
+        2014,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "grosjean",
+    "name": "Romain Grosjean",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2009,
+    "teams": [
+      "Renault",
+      "Lotus F1",
+      "Haas"
+    ],
+    "years": [
+      [
+        2009,
+        2009
+      ],
+      [
+        2012,
+        2020
+      ]
+    ]
+  },
+  {
+    "id": "buemi",
+    "name": "Sébastien Buemi",
+    "nationality": "Elvețian",
+    "titles": 0,
+    "debut": 2009,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2009,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "senna",
+    "name": "Bruno Senna",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2010,
+    "teams": [
+      "HRT",
+      "Renault",
+      "Williams"
+    ],
+    "years": [
+      [
+        2010,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "chandhok",
+    "name": "Karun Chandhok",
+    "nationality": "Indian",
+    "titles": 0,
+    "debut": 2010,
+    "teams": [
+      "HRT",
+      "Lotus Racing"
+    ],
+    "years": [
+      [
+        2010,
+        2011
+      ]
+    ]
+  },
+  {
+    "id": "di-grassi",
+    "name": "Lucas di Grassi",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2010,
+    "teams": [
+      "Virgin"
+    ],
+    "years": [
+      [
+        2010,
+        2010
+      ]
+    ]
+  },
+  {
+    "id": "hulkenberg",
+    "name": "Nico Hülkenberg",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2010,
+    "teams": [
+      "Williams",
+      "Force India",
+      "Sauber",
+      "Renault",
+      "Racing Point",
+      "Aston Martin",
+      "Haas",
+      "Kick Sauber",
+      "Audi"
+    ],
+    "years": [
+      [
+        2010,
+        2010
+      ],
+      [
+        2012,
+        2020
+      ],
+      [
+        2022,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "petrov",
+    "name": "Vitaly Petrov",
+    "nationality": "Rus",
+    "titles": 0,
+    "debut": 2010,
+    "teams": [
+      "Renault",
+      "Caterham"
+    ],
+    "years": [
+      [
+        2010,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "ricciardo",
+    "name": "Daniel Ricciardo",
+    "nationality": "Australian",
+    "titles": 0,
+    "debut": 2011,
+    "teams": [
+      "HRT",
+      "Toro Rosso",
+      "Red Bull",
+      "Renault",
+      "McLaren",
+      "AlphaTauri",
+      "RB"
+    ],
+    "years": [
+      [
+        2011,
+        2024
+      ]
+    ]
+  },
+  {
+    "id": "d-ambrosio",
+    "name": "Jérôme d'Ambrosio",
+    "nationality": "Belgian",
+    "titles": 0,
+    "debut": 2011,
+    "teams": [
+      "Virgin",
+      "Lotus F1"
+    ],
+    "years": [
+      [
+        2011,
+        2012
+      ]
+    ]
+  },
+  {
+    "id": "maldonado",
+    "name": "Pastor Maldonado",
+    "nationality": "Venezuelean",
+    "titles": 0,
+    "debut": 2011,
+    "teams": [
+      "Williams",
+      "Lotus F1"
+    ],
+    "years": [
+      [
+        2011,
+        2015
+      ]
+    ]
+  },
+  {
+    "id": "di-resta",
+    "name": "Paul di Resta",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2011,
+    "teams": [
+      "Force India",
+      "Williams"
+    ],
+    "years": [
+      [
+        2011,
+        2013
+      ],
+      [
+        2017,
+        2017
+      ]
+    ]
+  },
+  {
+    "id": "perez",
+    "name": "Sergio Pérez",
+    "nationality": "Mexican",
+    "titles": 0,
+    "debut": 2011,
+    "teams": [
+      "Sauber",
+      "McLaren",
+      "Force India",
+      "Racing Point",
+      "Red Bull",
+      "Cadillac"
+    ],
+    "years": [
+      [
+        2011,
+        2024
+      ],
+      [
+        2026,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "pic",
+    "name": "Charles Pic",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2012,
+    "teams": [
+      "Marussia",
+      "Caterham"
+    ],
+    "years": [
+      [
+        2012,
+        2013
+      ]
+    ]
+  },
+  {
+    "id": "vergne",
+    "name": "Jean-Éric Vergne",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2012,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2012,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "gutierrez",
+    "name": "Esteban Gutiérrez",
+    "nationality": "Mexican",
+    "titles": 0,
+    "debut": 2013,
+    "teams": [
+      "Sauber",
+      "Haas"
+    ],
+    "years": [
+      [
+        2013,
+        2014
+      ],
+      [
+        2016,
+        2016
+      ]
+    ]
+  },
+  {
+    "id": "van-der-garde",
+    "name": "Giedo van der Garde",
+    "nationality": "Olandez",
+    "titles": 0,
+    "debut": 2013,
+    "teams": [
+      "Caterham"
+    ],
+    "years": [
+      [
+        2013,
+        2013
+      ]
+    ]
+  },
+  {
+    "id": "bianchi",
+    "name": "Jules Bianchi",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2013,
+    "teams": [
+      "Marussia"
+    ],
+    "years": [
+      [
+        2013,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "chilton",
+    "name": "Max Chilton",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2013,
+    "teams": [
+      "Marussia"
+    ],
+    "years": [
+      [
+        2013,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "bottas",
+    "name": "Valtteri Bottas",
+    "nationality": "Finlandez",
+    "titles": 0,
+    "debut": 2013,
+    "teams": [
+      "Williams",
+      "Mercedes",
+      "Alfa Romeo",
+      "Kick Sauber",
+      "Cadillac"
+    ],
+    "years": [
+      [
+        2013,
+        2024
+      ],
+      [
+        2026,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "lotterer",
+    "name": "André Lotterer",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2014,
+    "teams": [
+      "Caterham"
+    ],
+    "years": [
+      [
+        2014,
+        2014
+      ]
+    ]
+  },
+  {
+    "id": "kvyat",
+    "name": "Daniil Kvyat",
+    "nationality": "Rus",
+    "titles": 0,
+    "debut": 2014,
+    "teams": [
+      "Toro Rosso",
+      "Red Bull",
+      "AlphaTauri"
+    ],
+    "years": [
+      [
+        2014,
+        2017
+      ],
+      [
+        2019,
+        2020
+      ]
+    ]
+  },
+  {
+    "id": "magnussen",
+    "name": "Kevin Magnussen",
+    "nationality": "Danez",
+    "titles": 0,
+    "debut": 2014,
+    "teams": [
+      "McLaren",
+      "Renault",
+      "Haas"
+    ],
+    "years": [
+      [
+        2014,
+        2014
+      ],
+      [
+        2016,
+        2020
+      ],
+      [
+        2022,
+        2024
+      ]
+    ]
+  },
+  {
+    "id": "ericsson",
+    "name": "Marcus Ericsson",
+    "nationality": "Suedez",
+    "titles": 0,
+    "debut": 2014,
+    "teams": [
+      "Caterham",
+      "Sauber"
+    ],
+    "years": [
+      [
+        2014,
+        2018
+      ]
+    ]
+  },
+  {
+    "id": "stevens",
+    "name": "Will Stevens",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2014,
+    "teams": [
+      "Caterham",
+      "Marussia"
+    ],
+    "years": [
+      [
+        2014,
+        2015
+      ]
+    ]
+  },
+  {
+    "id": "rossi",
+    "name": "Alexander Rossi",
+    "nationality": "American",
+    "titles": 0,
+    "debut": 2015,
+    "teams": [
+      "Marussia"
+    ],
+    "years": [
+      [
+        2015,
+        2015
+      ]
+    ]
+  },
+  {
+    "id": "sainz-jr",
+    "name": "Carlos Sainz Jr.",
+    "nationality": "Spaniol",
+    "titles": 0,
+    "debut": 2015,
+    "teams": [
+      "Toro Rosso",
+      "Renault",
+      "McLaren",
+      "Ferrari",
+      "Williams"
+    ],
+    "years": [
+      [
+        2015,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "nasr",
+    "name": "Felipe Nasr",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2015,
+    "teams": [
+      "Sauber"
+    ],
+    "years": [
+      [
+        2015,
+        2016
+      ]
+    ]
+  },
+  {
+    "id": "max-verstappen",
+    "name": "Max Verstappen",
+    "nationality": "Olandez",
+    "titles": 4,
+    "debut": 2015,
+    "teams": [
+      "Toro Rosso",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        2015,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "merhi",
+    "name": "Roberto Merhi",
+    "nationality": "Spaniol",
+    "titles": 0,
+    "debut": 2015,
+    "teams": [
+      "Marussia"
+    ],
+    "years": [
+      [
+        2015,
+        2015
+      ]
+    ]
+  },
+  {
+    "id": "ocon",
+    "name": "Esteban Ocon",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2016,
+    "teams": [
+      "Manor",
+      "Force India",
+      "Renault",
+      "Alpine",
+      "Haas"
+    ],
+    "years": [
+      [
+        2016,
+        2018
+      ],
+      [
+        2020,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "palmer",
+    "name": "Jolyon Palmer",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2016,
+    "teams": [
+      "Renault"
+    ],
+    "years": [
+      [
+        2016,
+        2017
+      ]
+    ]
+  },
+  {
+    "id": "wehrlein",
+    "name": "Pascal Wehrlein",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2016,
+    "teams": [
+      "Manor",
+      "Sauber"
+    ],
+    "years": [
+      [
+        2016,
+        2017
+      ]
+    ]
+  },
+  {
+    "id": "haryanto",
+    "name": "Rio Haryanto",
+    "nationality": "Indonezian",
+    "titles": 0,
+    "debut": 2016,
+    "teams": [
+      "Manor"
+    ],
+    "years": [
+      [
+        2016,
+        2016
+      ]
+    ]
+  },
+  {
+    "id": "vandoorne",
+    "name": "Stoffel Vandoorne",
+    "nationality": "Belgian",
+    "titles": 0,
+    "debut": 2016,
+    "teams": [
+      "McLaren"
+    ],
+    "years": [
+      [
+        2016,
+        2018
+      ]
+    ]
+  },
+  {
+    "id": "giovinazzi",
+    "name": "Antonio Giovinazzi",
+    "nationality": "Italian",
+    "titles": 0,
+    "debut": 2017,
+    "teams": [
+      "Sauber",
+      "Alfa Romeo"
+    ],
+    "years": [
+      [
+        2017,
+        2017
+      ],
+      [
+        2019,
+        2021
+      ]
+    ]
+  },
+  {
+    "id": "hartley",
+    "name": "Brendon Hartley",
+    "nationality": "Neozeelandez",
+    "titles": 0,
+    "debut": 2017,
+    "teams": [
+      "Toro Rosso"
+    ],
+    "years": [
+      [
+        2017,
+        2018
+      ]
+    ]
+  },
+  {
+    "id": "stroll",
+    "name": "Lance Stroll",
+    "nationality": "Canadian",
+    "titles": 0,
+    "debut": 2017,
+    "teams": [
+      "Williams",
+      "Racing Point",
+      "Aston Martin"
+    ],
+    "years": [
+      [
+        2017,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "gasly",
+    "name": "Pierre Gasly",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2017,
+    "teams": [
+      "Toro Rosso",
+      "Red Bull",
+      "AlphaTauri",
+      "Alpine"
+    ],
+    "years": [
+      [
+        2017,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "leclerc",
+    "name": "Charles Leclerc",
+    "nationality": "Monegasc",
+    "titles": 0,
+    "debut": 2018,
+    "teams": [
+      "Sauber",
+      "Ferrari"
+    ],
+    "years": [
+      [
+        2018,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "sirotkin",
+    "name": "Sergey Sirotkin",
+    "nationality": "Rus",
+    "titles": 0,
+    "debut": 2018,
+    "teams": [
+      "Williams"
+    ],
+    "years": [
+      [
+        2018,
+        2018
+      ]
+    ]
+  },
+  {
+    "id": "albon",
+    "name": "Alexander Albon",
+    "nationality": "Thailandez",
+    "titles": 0,
+    "debut": 2019,
+    "teams": [
+      "Toro Rosso",
+      "Red Bull",
+      "Williams"
+    ],
+    "years": [
+      [
+        2019,
+        2020
+      ],
+      [
+        2022,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "russell",
+    "name": "George Russell",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2019,
+    "teams": [
+      "Williams",
+      "Mercedes"
+    ],
+    "years": [
+      [
+        2019,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "norris",
+    "name": "Lando Norris",
+    "nationality": "Britanic",
+    "titles": 1,
+    "debut": 2019,
+    "teams": [
+      "McLaren"
+    ],
+    "years": [
+      [
+        2019,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "aitken",
+    "name": "Jack Aitken",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2020,
+    "teams": [
+      "Williams"
+    ],
+    "years": [
+      [
+        2020,
+        2020
+      ]
+    ]
+  },
+  {
+    "id": "latifi",
+    "name": "Nicholas Latifi",
+    "nationality": "Canadian",
+    "titles": 0,
+    "debut": 2020,
+    "teams": [
+      "Williams"
+    ],
+    "years": [
+      [
+        2020,
+        2022
+      ]
+    ]
+  },
+  {
+    "id": "fittipaldi",
+    "name": "Pietro Fittipaldi",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2020,
+    "teams": [
+      "Haas"
+    ],
+    "years": [
+      [
+        2020,
+        2020
+      ]
+    ]
+  },
+  {
+    "id": "mick-schumacher",
+    "name": "Mick Schumacher",
+    "nationality": "German",
+    "titles": 0,
+    "debut": 2021,
+    "teams": [
+      "Haas"
+    ],
+    "years": [
+      [
+        2021,
+        2022
+      ]
+    ]
+  },
+  {
+    "id": "mazepin",
+    "name": "Nikita Mazepin",
+    "nationality": "Rus",
+    "titles": 0,
+    "debut": 2021,
+    "teams": [
+      "Haas"
+    ],
+    "years": [
+      [
+        2021,
+        2021
+      ]
+    ]
+  },
+  {
+    "id": "tsunoda",
+    "name": "Yuki Tsunoda",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2021,
+    "teams": [
+      "AlphaTauri",
+      "RB",
+      "Racing Bulls",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        2021,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "zhou",
+    "name": "Guanyu Zhou",
+    "nationality": "Chinez",
+    "titles": 0,
+    "debut": 2022,
+    "teams": [
+      "Alfa Romeo",
+      "Kick Sauber"
+    ],
+    "years": [
+      [
+        2022,
+        2024
+      ]
+    ]
+  },
+  {
+    "id": "de-vries",
+    "name": "Nyck de Vries",
+    "nationality": "Olandez",
+    "titles": 0,
+    "debut": 2022,
+    "teams": [
+      "Williams",
+      "AlphaTauri"
+    ],
+    "years": [
+      [
+        2022,
+        2023
+      ]
+    ]
+  },
+  {
+    "id": "lawson",
+    "name": "Liam Lawson",
+    "nationality": "Neozeelandez",
+    "titles": 0,
+    "debut": 2023,
+    "teams": [
+      "AlphaTauri",
+      "RB",
+      "Red Bull",
+      "Racing Bulls"
+    ],
+    "years": [
+      [
+        2023,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "sargeant",
+    "name": "Logan Sargeant",
+    "nationality": "American",
+    "titles": 0,
+    "debut": 2023,
+    "teams": [
+      "Williams"
+    ],
+    "years": [
+      [
+        2023,
+        2024
+      ]
+    ]
+  },
+  {
+    "id": "piastri",
+    "name": "Oscar Piastri",
+    "nationality": "Australian",
+    "titles": 0,
+    "debut": 2023,
+    "teams": [
+      "McLaren"
+    ],
+    "years": [
+      [
+        2023,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "colapinto",
+    "name": "Franco Colapinto",
+    "nationality": "Argentinian",
+    "titles": 0,
+    "debut": 2024,
+    "teams": [
+      "Williams",
+      "Alpine"
+    ],
+    "years": [
+      [
+        2024,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "doohan",
+    "name": "Jack Doohan",
+    "nationality": "Australian",
+    "titles": 0,
+    "debut": 2024,
+    "teams": [
+      "Alpine"
+    ],
+    "years": [
+      [
+        2024,
+        2025
+      ]
+    ]
+  },
+  {
+    "id": "bearman",
+    "name": "Oliver Bearman",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2024,
+    "teams": [
+      "Ferrari",
+      "Haas"
+    ],
+    "years": [
+      [
+        2024,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "bortoleto",
+    "name": "Gabriel Bortoleto",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2025,
+    "teams": [
+      "Kick Sauber",
+      "Audi"
+    ],
+    "years": [
+      [
+        2025,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "hadjar",
+    "name": "Isack Hadjar",
+    "nationality": "Francez",
+    "titles": 0,
+    "debut": 2025,
+    "teams": [
+      "Racing Bulls",
+      "Red Bull"
+    ],
+    "years": [
+      [
+        2025,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "antonelli",
+    "name": "Kimi Antonelli",
+    "nationality": "Italian",
+    "titles": 1,
+    "debut": 2025,
+    "teams": [
+      "Mercedes"
+    ],
+    "years": [
+      [
+        2025,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "lindblad",
+    "name": "Arvid Lindblad",
+    "nationality": "Britanic",
+    "titles": 0,
+    "debut": 2026,
+    "teams": [
+      "Racing Bulls"
+    ],
+    "years": [
+      [
+        2026,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "camara",
+    "name": "Rafael Câmara",
+    "nationality": "Brazilian",
+    "titles": 0,
+    "debut": 2026,
+    "teams": [
+      "Haas"
+    ],
+    "years": [
+      [
+        2026,
+        2026
+      ]
+    ]
+  },
+  {
+    "id": "hirakawa",
+    "name": "Ryō Hirakawa",
+    "nationality": "Japonez",
+    "titles": 0,
+    "debut": 2026,
+    "teams": [
+      "Haas"
+    ],
+    "years": [
+      [
+        2026,
+        2026
+      ]
+    ]
+  }
+]
